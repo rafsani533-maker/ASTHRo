@@ -1358,17 +1358,17 @@ async function loadAnime() {
     }
 }
 
-loadAnime();
-</script>
+const SUPABASE_URL = window.SUPABASE_URL;
+const SUPABASE_KEY = window.SUPABASE_PUBLISHABLE_KEY;
 
-    <script>
-async function loadAnime() {
+async function loadAnimeFromSupabase() {
     try {
         const response = await fetch(
-            `${window.SUPABASE_URL}/rest/v1/anime?select=*`,
+            `${SUPABASE_URL}/rest/v1/anime?select=*`,
             {
                 headers: {
-                    "apikey": window.SUPABASE_PUBLISHABLE_KEY
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": `Bearer ${SUPABASE_KEY}`
                 }
             }
         );
@@ -1377,14 +1377,53 @@ async function loadAnime() {
             throw new Error(await response.text());
         }
 
-        const anime = await response.json();
+        const rows = await response.json();
 
-        console.log("Anime loaded from Supabase:", anime);
+        console.log("Supabase anime:", rows);
+
+        if (!Array.isArray(rows) || rows.length === 0) {
+            console.log("No anime found in Supabase.");
+            return;
+        }
+
+        const supabaseAnime = rows.map(item => ({
+            title:
+                item.title ||
+                item.name ||
+                item.anime_title ||
+                "Untitled Anime",
+
+            image:
+                item.image ||
+                item.poster ||
+                item.poster_url ||
+                item.image_url ||
+                "",
+
+            meta:
+                item.meta ||
+                item.type ||
+                "SUB • DUB",
+
+            badge:
+                item.badge ||
+                "HD"
+        }));
+
+        // Replace the old hard-coded anime list
+        animeData.length = 0;
+        animeData.push(...supabaseAnime);
+
+        // Show Supabase anime on the website
+        renderAnime(animeData);
 
     } catch (error) {
         console.error("Supabase error:", error);
     }
 }
+
+loadAnimeFromSupabase();
+</script>
 
 loadAnime();
 </script>
