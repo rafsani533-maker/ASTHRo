@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ASTHRo — Anime & Novel Universe">
+  <title>ASTHRo — Anime & Novel Universe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="top-strip"></div>
+
+  <header class="navbar">
+    <a class="brand" href="#home" aria-label="ASTHRo home">
+      <img src="assets/asthro-logo.jpeg" alt="ASTHRo logo">
+      <span>asthr<span class="brand-o">o</span></span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#anime">Anime</a>
+      <a href="#novels">Novels</a>
+      <a href="#trending">Trending</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="icon-btn" id="searchOpen" title="Search">⌕</button>
+      <a class="login-btn" href="#login">Login</a>
+      <a class="admin-mini" href="admin.html">Developer</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow">WELCOME TO ASTHRo</p>
+        <h1>Anime. Stories.<br><span>Infinite worlds.</span></h1>
+        <p class="hero-text">Discover anime you love and read original novels chapter by chapter — all in one elegant universe.</p>
+        <div class="hero-buttons">
+          <a class="btn btn-red" href="#anime">Explore Anime</a>
+          <a class="btn btn-outline" href="#novels">Read Novels</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong id="animeCount">8</strong><span>Anime</span></div>
+          <div><strong>1</strong><span>Featured Novel</span></div>
+          <div><strong>∞</strong><span>Stories</span></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="hero-glow"></div>
+        <img src="assets/covers/attack-on-titan.jpeg" alt="Featured anime">
+        <div class="hero-card">
+          <span>FEATURED</span>
+          <strong>Attack on Titan</strong>
+          <small>The Final Season</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="anime">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">EXPLORE</p>
+          <h2>Popular Anime</h2>
+        </div>
+        <button class="text-btn" id="showAllAnime">View all →</button>
+      </div>
+      <div class="anime-grid" id="animeGrid"></div>
+    </section>
+
+    <section class="section dark-section" id="trending">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">HOT RIGHT NOW</p>
+          <h2>Trending</h2>
+        </div>
+      </div>
+      <div class="trending-row" id="trendingRow"></div>
+    </section>
+
+    <section class="section novel-section" id="novels">
+      <div class="novel-banner">
+        <div>
+          <p class="eyebrow">ASTHRo NOVEL LIBRARY</p>
+          <h2>Read stories, one chapter at a time.</h2>
+          <p>Authors can publish original novels and readers can bookmark their progress.</p>
+          <a class="btn btn-red" href="#novel-reader">Read re:think</a>
+        </div>
+        <div class="novel-mark">N</div>
+      </div>
+
+      <div class="section-head novel-head">
+        <div>
+          <p class="eyebrow">FEATURED NOVEL</p>
+          <h2>re:think</h2>
+        </div>
+        <span class="author-badge">AUTHOR · EREN</span>
+      </div>
+
+      <article class="novel-card" id="novel-reader">
+        <div class="novel-cover">
+          <div class="novel-cover-inner">re:<br><span>think</span></div>
+        </div>
+        <div class="novel-info">
+          <div class="tags"><span>Psychological</span><span>Mystery</span><span>Original</span></div>
+          <h3>re:think</h3>
+          <p>A featured ASTHRo original. The reader is designed for chapter-by-chapter reading, bookmarks and progress tracking.</p>
+          <div class="chapter-list">
+            <button onclick="openChapter(1)">Chapter 01 <span>Read →</span></button>
+            <button onclick="openChapter(2)">Chapter 02 <span>Read →</span></button>
+            <button onclick="openChapter(3)">Chapter 03 <span>Read →</span></button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section about-section" id="about">
+      <div class="about-grid">
+        <div>
+          <p class="eyebrow">ABOUT ASTHRo</p>
+          <h2>Built for anime fans and storytellers.</h2>
+        </div>
+        <div>
+          <p>ASTHRo combines an anime library with an original-novel platform. The public site is designed for discovery, while the private Developer panel is reserved for the ASTHRo owner.</p>
+          <div class="permission-box">
+            <div><b>Developer</b><span>Anime + episodes + novels + moderation</span></div>
+            <div><b>Author</b><span>Own novels + chapters</span></div>
+            <div><b>Reader</b><span>Watch, read, bookmark, rate</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section login-section" id="login">
+      <div class="login-card">
+        <div>
+          <p class="eyebrow">YOUR ASTHRo ACCOUNT</p>
+          <h2>Keep your watchlist & reading progress.</h2>
+          <p>UI is ready now. Real authentication will be connected in the next backend phase.</p>
+        </div>
+        <button class="btn btn-red" onclick="demoLogin()">Demo Login</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand">
+      <img src="assets/asthro-logo.jpeg" alt="">
+      <span>asthr<span>o</span></span>
+    </div>
+    <p>© 2026 ASTHRo. Built as an original platform concept.</p>
+    <div class="footer-links"><a href="#about">About</a><a href="admin.html">Developer Panel</a></div>
+  </footer>
+
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-box">
+      <button class="close-btn" id="searchClose">×</button>
+      <p class="eyebrow">SEARCH ASTHRo</p>
+      <h2>Find an anime</h2>
+      <input id="searchInput" type="search" placeholder="Attack on Titan, Bleach, Re:Zero...">
+      <div id="searchResults"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="animeModal">
+    <div class="modal-card">
+      <button class="close-btn" onclick="closeAnime()">×</button>
+      <img id="modalImage" src="" alt="">
+      <div class="modal-body">
+        <p class="eyebrow" id="modalType">ANIME</p>
+        <h2 id="modalTitle"></h2>
+        <p id="modalMeta"></p>
+        <p id="modalDescription"></p>
+        <div class="episode-preview" id="episodePreview"></div>
+        <button class="btn btn-red" onclick="alert('Watch page placeholder — connect your licensed video source in the backend phase.')">Watch</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="chapterModal">
+    <div class="chapter-reader">
+      <button class="close-btn" onclick="closeChapter()">×</button>
+      <p class="eyebrow">re:think</p>
+      <h2 id="chapterTitle">Chapter 01</h2>
+      <div class="reader-text" id="readerText"></div>
+      <div class="reader-nav">
+        <button class="btn btn-outline" onclick="changeChapter(-1)">← Previous</button>
+        <button class="btn btn-red" onclick="changeChapter(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
