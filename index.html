@@ -1,199 +1,1148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ASTHRo — Anime & Novel Universe">
-  <title>ASTHRo — Anime & Novel Universe</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="top-strip"></div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <header class="navbar">
-    <a class="brand" href="#home" aria-label="ASTHRo home">
-      <img src="assets/asthro-logo.jpeg" alt="ASTHRo logo">
-      <span>asthr<span class="brand-o">o</span></span>
+<title>ASTHRo</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#080b10;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    overflow-x:hidden;
+}
+
+/* NAVBAR */
+
+.navbar{
+    height:68px;
+    background:#0e1826;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    border-bottom:1px solid #182536;
+}
+
+.menu{
+    width:42px;
+    height:42px;
+    border:0;
+    background:transparent;
+    color:#ddd;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    margin-left:12px;
+    color:white;
+    text-decoration:none;
+    font-size:27px;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+.logo span{
+    color:#ed0715;
+}
+
+.nav-right{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.search{
+    width:42px;
+    height:42px;
+    border:0;
+    background:transparent;
+    color:#b9c4d2;
+    font-size:25px;
+    cursor:pointer;
+}
+
+.sign{
+    background:#ed0715;
+    border:0;
+    color:#fff;
+    padding:11px 18px;
+    border-radius:5px;
+    font-size:14px;
+    cursor:pointer;
+}
+
+/* HERO */
+
+.hero{
+    padding:78px 0 35px;
+    background:#080b10;
+}
+
+.slider{
+    position:relative;
+    height:490px;
+    width:100%;
+    overflow:hidden;
+    border-radius:22px;
+}
+
+.slide{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    transition:opacity .5s ease;
+    background-size:cover;
+    background-position:center;
+}
+
+.slide.active{
+    opacity:1;
+}
+
+.slide:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(7,12,20,.98) 0%,
+            rgba(7,12,20,.82) 30%,
+            rgba(7,12,20,.25) 75%,
+            rgba(7,12,20,.4) 100%
+        );
+}
+
+.slide-content{
+    position:absolute;
+    z-index:2;
+    left:8%;
+    bottom:65px;
+    width:58%;
+}
+
+.rank{
+    color:#ed0715;
+    font-size:11px;
+    font-weight:700;
+    margin-bottom:9px;
+}
+
+.slide-title{
+    font-size:34px;
+    line-height:1.08;
+    font-weight:800;
+    margin-bottom:12px;
+}
+
+.slide-text{
+    color:#c4cbd4;
+    font-size:14px;
+    line-height:1.6;
+    max-width:540px;
+    margin-bottom:18px;
+}
+
+.play{
+    background:#ed0715;
+    border:0;
+    color:#fff;
+    padding:11px 18px;
+    border-radius:5px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.play:hover{
+    background:#ff1826;
+}
+
+.dots{
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:5;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#ddd;
+    border:0;
+    cursor:pointer;
+    opacity:.9;
+}
+
+.dot.active{
+    background:#ed0715;
+    transform:scale(1.25);
+}
+
+/* GENERAL SECTION */
+
+.section{
+    padding:38px 20px;
+}
+
+.section-head{
+    display:flex;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.section-head h2{
+    font-size:24px;
+    font-weight:700;
+}
+
+.section-head a{
+    margin-left:auto;
+    color:#ed0715;
+    font-size:13px;
+    text-decoration:none;
+}
+
+/* ANIME CARDS */
+
+.anime-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:14px;
+}
+
+.card{
+    background:#101419;
+    border-radius:7px;
+    overflow:hidden;
+    border:1px solid #202932;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    border-color:#ed0715;
+}
+
+.poster{
+    position:relative;
+    height:260px;
+    overflow:hidden;
+}
+
+.poster img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.badge{
+    position:absolute;
+    left:8px;
+    top:8px;
+    background:#ed0715;
+    color:#fff;
+    padding:4px 7px;
+    border-radius:3px;
+    font-size:9px;
+    font-weight:800;
+}
+
+.card-info{
+    padding:10px;
+}
+
+.card-title{
+    font-size:13px;
+    font-weight:700;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.card-meta{
+    margin-top:5px;
+    color:#788391;
+    font-size:10px;
+}
+
+/* NOVELS */
+
+.novel-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.novel{
+    background:#101419;
+    border:1px solid #202932;
+    border-radius:7px;
+    padding:17px;
+    min-height:155px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.novel:hover{
+    border-color:#ed0715;
+    transform:translateY(-3px);
+}
+
+.novel small{
+    color:#ed0715;
+    font-size:9px;
+    font-weight:700;
+}
+
+.novel h3{
+    margin-top:22px;
+    font-size:16px;
+}
+
+.novel p{
+    margin-top:7px;
+    color:#858e99;
+    font-size:11px;
+    line-height:1.5;
+}
+
+/* NOTICE */
+
+.notice{
+    margin:0 20px 20px;
+    background:#0e1d2b;
+    border:1px solid #174b6d;
+    border-radius:7px;
+    padding:13px 15px;
+    color:#c6d1dc;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.notice span{
+    color:#ed0715;
+    font-weight:700;
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:20px;
+    padding:35px 20px;
+    text-align:center;
+    color:#66717d;
+    font-size:11px;
+    border-top:1px solid #18212b;
+}
+
+footer strong{
+    color:#fff;
+    font-size:20px;
+}
+
+footer strong span{
+    color:#ed0715;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    .navbar{
+        height:64px;
+        padding:0 14px;
+    }
+
+    .logo{
+        font-size:24px;
+    }
+
+    .sign{
+        padding:9px 13px;
+        font-size:12px;
+    }
+
+    .hero{
+        padding:55px 0 25px;
+    }
+
+    .slider{
+        height:470px;
+        border-radius:18px;
+    }
+
+    .slide-content{
+        left:9%;
+        bottom:55px;
+        width:78%;
+    }
+
+    .slide-title{
+        font-size:29px;
+    }
+
+    .slide-text{
+        font-size:12px;
+        line-height:1.55;
+    }
+
+    .rank{
+        font-size:10px;
+    }
+
+    .play{
+        font-size:12px;
+        padding:10px 15px;
+    }
+
+    .dots{
+        right:12px;
+        gap:9px;
+    }
+
+    .dot{
+        width:8px;
+        height:8px;
+    }
+
+    .section{
+        padding:30px 20px;
+    }
+
+    .section-head h2{
+        font-size:22px;
+    }
+
+    .anime-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:11px;
+    }
+
+    .poster{
+        height:245px;
+    }
+
+    .card-info{
+        padding:8px;
+    }
+
+    .card-title{
+        font-size:12px;
+    }
+
+    .card-meta{
+        font-size:9px;
+    }
+
+    .novel-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+    }
+
+    .novel{
+        min-height:145px;
+        padding:13px;
+    }
+
+    .novel h3{
+        margin-top:18px;
+        font-size:14px;
+    }
+
+    .novel p{
+        font-size:10px;
+    }
+}
+
+@media(max-width:380px){
+
+    .slide-title{
+        font-size:26px;
+    }
+
+    .poster{
+        height:220px;
+    }
+
+    .section{
+        padding-left:14px;
+        padding-right:14px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <button class="menu" onclick="toggleMenu()">
+        ☰
+    </button>
+
+    <a class="logo" href="#home">
+        ASTHR<span>o</span>
     </a>
 
-    <nav class="nav-links">
-      <a href="#home">Home</a>
-      <a href="#anime">Anime</a>
-      <a href="#novels">Novels</a>
-      <a href="#trending">Trending</a>
-      <a href="#about">About</a>
-    </nav>
+    <div class="nav-right">
 
-    <div class="nav-actions">
-      <button class="icon-btn" id="searchOpen" title="Search">⌕</button>
-      <a class="login-btn" href="#login">Login</a>
-      <a class="admin-mini" href="admin.html">Developer</a>
+        <button class="search" onclick="searchAnime()">
+            ⌕
+        </button>
+
+        <button class="sign" onclick="alert('ASTHRo Sign in coming soon!')">
+            Sign in
+        </button>
+
     </div>
-  </header>
 
-  <main>
-    <section class="hero" id="home">
-      <div class="hero-copy">
-        <p class="eyebrow">WELCOME TO ASTHRo</p>
-        <h1>Anime. Stories.<br><span>Infinite worlds.</span></h1>
-        <p class="hero-text">Discover anime you love and read original novels chapter by chapter — all in one elegant universe.</p>
-        <div class="hero-buttons">
-          <a class="btn btn-red" href="#anime">Explore Anime</a>
-          <a class="btn btn-outline" href="#novels">Read Novels</a>
-        </div>
-        <div class="hero-stats">
-          <div><strong id="animeCount">8</strong><span>Anime</span></div>
-          <div><strong>1</strong><span>Featured Novel</span></div>
-          <div><strong>∞</strong><span>Stories</span></div>
-        </div>
-      </div>
-      <div class="hero-art">
-        <div class="hero-glow"></div>
-        <img src="assets/covers/attack-on-titan.jpeg" alt="Featured anime">
-        <div class="hero-card">
-          <span>FEATURED</span>
-          <strong>Attack on Titan</strong>
-          <small>The Final Season</small>
-        </div>
-      </div>
-    </section>
+</header>
 
-    <section class="section" id="anime">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">EXPLORE</p>
-          <h2>Popular Anime</h2>
-        </div>
-        <button class="text-btn" id="showAllAnime">View all →</button>
-      </div>
-      <div class="anime-grid" id="animeGrid"></div>
-    </section>
 
-    <section class="section dark-section" id="trending">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">HOT RIGHT NOW</p>
-          <h2>Trending</h2>
-        </div>
-      </div>
-      <div class="trending-row" id="trendingRow"></div>
-    </section>
+<!-- HERO -->
 
-    <section class="section novel-section" id="novels">
-      <div class="novel-banner">
-        <div>
-          <p class="eyebrow">ASTHRo NOVEL LIBRARY</p>
-          <h2>Read stories, one chapter at a time.</h2>
-          <p>Authors can publish original novels and readers can bookmark their progress.</p>
-          <a class="btn btn-red" href="#novel-reader">Read re:think</a>
-        </div>
-        <div class="novel-mark">N</div>
-      </div>
+<section class="hero" id="home">
 
-      <div class="section-head novel-head">
-        <div>
-          <p class="eyebrow">FEATURED NOVEL</p>
-          <h2>re:think</h2>
-        </div>
-        <span class="author-badge">AUTHOR · EREN</span>
-      </div>
+    <div class="slider">
 
-      <article class="novel-card" id="novel-reader">
-        <div class="novel-cover">
-          <div class="novel-cover-inner">re:<br><span>think</span></div>
-        </div>
-        <div class="novel-info">
-          <div class="tags"><span>Psychological</span><span>Mystery</span><span>Original</span></div>
-          <h3>re:think</h3>
-          <p>A featured ASTHRo original. The reader is designed for chapter-by-chapter reading, bookmarks and progress tracking.</p>
-          <div class="chapter-list">
-            <button onclick="openChapter(1)">Chapter 01 <span>Read →</span></button>
-            <button onclick="openChapter(2)">Chapter 02 <span>Read →</span></button>
-            <button onclick="openChapter(3)">Chapter 03 <span>Read →</span></button>
-          </div>
-        </div>
-      </article>
-    </section>
+        <!-- 1 -->
 
-    <section class="section about-section" id="about">
-      <div class="about-grid">
-        <div>
-          <p class="eyebrow">ABOUT ASTHRo</p>
-          <h2>Built for anime fans and storytellers.</h2>
-        </div>
-        <div>
-          <p>ASTHRo combines an anime library with an original-novel platform. The public site is designed for discovery, while the private Developer panel is reserved for the ASTHRo owner.</p>
-          <div class="permission-box">
-            <div><b>Developer</b><span>Anime + episodes + novels + moderation</span></div>
-            <div><b>Author</b><span>Own novels + chapters</span></div>
-            <div><b>Reader</b><span>Watch, read, bookmark, rate</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
+        <div
+            class="slide active"
+            style="background-image:url('attack-on-titan.jpeg')"
+        >
 
-    <section class="section login-section" id="login">
-      <div class="login-card">
-        <div>
-          <p class="eyebrow">YOUR ASTHRo ACCOUNT</p>
-          <h2>Keep your watchlist & reading progress.</h2>
-          <p>UI is ready now. Real authentication will be connected in the next backend phase.</p>
-        </div>
-        <button class="btn btn-red" onclick="demoLogin()">Demo Login</button>
-      </div>
-    </section>
-  </main>
+            <div class="slide-content">
 
-  <footer>
-    <div class="footer-brand">
-      <img src="assets/asthro-logo.jpeg" alt="">
-      <span>asthr<span>o</span></span>
+                <div class="rank">
+                    #1 TRENDING
+                </div>
+
+                <h1 class="slide-title">
+                    ATTACK ON TITAN
+                </h1>
+
+                <p class="slide-text">
+                    Humanity fights for survival while
+                    uncovering the mystery behind the Titans.
+                </p>
+
+                <button
+                    class="play"
+                    onclick="chooseAnime('Attack on Titan')"
+                >
+                    ▶ CHOOSE
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- 2 -->
+
+        <div
+            class="slide"
+            style="background-image:url('bleach.jpeg')"
+        >
+
+            <div class="slide-content">
+
+                <div class="rank">
+                    #2 TRENDING
+                </div>
+
+                <h1 class="slide-title">
+                    BLEACH
+                </h1>
+
+                <p class="slide-text">
+                    Soul Reapers, powerful enemies and
+                    an unforgettable supernatural adventure.
+                </p>
+
+                <button
+                    class="play"
+                    onclick="chooseAnime('Bleach')"
+                >
+                    ▶ CHOOSE
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- 3 -->
+
+        <div
+            class="slide"
+            style="background-image:url('eminence-in-shadow.jpeg')"
+        >
+
+            <div class="slide-content">
+
+                <div class="rank">
+                    #3 TRENDING
+                </div>
+
+                <h1 class="slide-title">
+                    THE EMINENCE IN SHADOW
+                </h1>
+
+                <p class="slide-text">
+                    A mysterious world of shadows, secret
+                    organizations and overwhelming power.
+                </p>
+
+                <button
+                    class="play"
+                    onclick="chooseAnime('The Eminence in Shadow')"
+                >
+                    ▶ CHOOSE
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- 4 -->
+
+        <div
+            class="slide"
+            style="background-image:url('mushoku-tensei.jpeg')"
+        >
+
+            <div class="slide-content">
+
+                <div class="rank">
+                    #4 TRENDING
+                </div>
+
+                <h1 class="slide-title">
+                    MUSHOKU TENSEI
+                </h1>
+
+                <p class="slide-text">
+                    Magic, adventure and a second chance
+                    in a completely new world.
+                </p>
+
+                <button
+                    class="play"
+                    onclick="chooseAnime('Mushoku Tensei')"
+                >
+                    ▶ CHOOSE
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- 5 -->
+
+        <div
+            class="slide"
+            style="background-image:url('chainsaw-man-reze-arc.jpeg')"
+        >
+
+            <div class="slide-content">
+
+                <div class="rank">
+                    #5 TRENDING
+                </div>
+
+                <h1 class="slide-title">
+                    CHAINSAW MAN
+                </h1>
+
+                <p class="slide-text">
+                    Denji's dangerous life as a Devil Hunter
+                    gets more chaotic than ever.
+                </p>
+
+                <button
+                    class="play"
+                    onclick="chooseAnime('Chainsaw Man')"
+                >
+                    ▶ CHOOSE
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- DOTS -->
+
+        <div class="dots">
+
+            <button
+                class="dot active"
+                onclick="goSlide(0)"
+            ></button>
+
+            <button
+                class="dot"
+                onclick="goSlide(1)"
+            ></button>
+
+            <button
+                class="dot"
+                onclick="goSlide(2)"
+            ></button>
+
+            <button
+                class="dot"
+                onclick="goSlide(3)"
+            ></button>
+
+            <button
+                class="dot"
+                onclick="goSlide(4)"
+            ></button>
+
+        </div>
+
     </div>
-    <p>© 2026 ASTHRo. Built as an original platform concept.</p>
-    <div class="footer-links"><a href="#about">About</a><a href="admin.html">Developer Panel</a></div>
-  </footer>
 
-  <div class="search-overlay" id="searchOverlay">
-    <div class="search-box">
-      <button class="close-btn" id="searchClose">×</button>
-      <p class="eyebrow">SEARCH ASTHRo</p>
-      <h2>Find an anime</h2>
-      <input id="searchInput" type="search" placeholder="Attack on Titan, Bleach, Re:Zero...">
-      <div id="searchResults"></div>
+</section>
+
+
+<!-- NOTICE -->
+
+<div class="notice">
+
+    🔖 Bookmark <span>ASTHRo</span>
+    to stay updated about new anime,
+    novels and releases.
+
+</div>
+
+
+<!-- ANIME -->
+
+<section class="section" id="anime">
+
+    <div class="section-head">
+
+        <h2>
+            Latest Anime
+        </h2>
+
+        <a href="#anime">
+            View All →
+        </a>
+
     </div>
-  </div>
 
-  <div class="modal" id="animeModal">
-    <div class="modal-card">
-      <button class="close-btn" onclick="closeAnime()">×</button>
-      <img id="modalImage" src="" alt="">
-      <div class="modal-body">
-        <p class="eyebrow" id="modalType">ANIME</p>
-        <h2 id="modalTitle"></h2>
-        <p id="modalMeta"></p>
-        <p id="modalDescription"></p>
-        <div class="episode-preview" id="episodePreview"></div>
-        <button class="btn btn-red" onclick="alert('Watch page placeholder — connect your licensed video source in the backend phase.')">Watch</button>
-      </div>
+
+    <div class="anime-grid">
+
+
+        <div
+            class="card"
+            onclick="chooseAnime('Attack on Titan')"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="attack-on-titan.jpeg"
+                    alt="Attack on Titan"
+                >
+
+                <span class="badge">
+                    HD
+                </span>
+
+            </div>
+
+            <div class="card-info">
+
+                <div class="card-title">
+                    Attack on Titan
+                </div>
+
+                <div class="card-meta">
+                    SUB • DUB
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="card"
+            onclick="chooseAnime('Bleach')"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="bleach.jpeg"
+                    alt="Bleach"
+                >
+
+                <span class="badge">
+                    HD
+                </span>
+
+            </div>
+
+            <div class="card-info">
+
+                <div class="card-title">
+                    Bleach
+                </div>
+
+                <div class="card-meta">
+                    SUB • DUB
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="card"
+            onclick="chooseAnime('The Eminence in Shadow')"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="eminence-in-shadow.jpeg"
+                    alt="Eminence in Shadow"
+                >
+
+                <span class="badge">
+                    HD
+                </span>
+
+            </div>
+
+            <div class="card-info">
+
+                <div class="card-title">
+                    The Eminence in Shadow
+                </div>
+
+                <div class="card-meta">
+                    SUB • DUB
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="card"
+            onclick="chooseAnime('Mushoku Tensei')"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="mushoku-tensei.jpeg"
+                    alt="Mushoku Tensei"
+                >
+
+                <span class="badge">
+                    HD
+                </span>
+
+            </div>
+
+            <div class="card-info">
+
+                <div class="card-title">
+                    Mushoku Tensei
+                </div>
+
+                <div class="card-meta">
+                    SUB • DUB
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="card"
+            onclick="chooseAnime('Chainsaw Man')"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="chainsaw-man-reze-arc.jpeg"
+                    alt="Chainsaw Man"
+                >
+
+                <span class="badge">
+                    HD
+                </span>
+
+            </div>
+
+            <div class="card-info">
+
+                <div class="card-title">
+                    Chainsaw Man
+                </div>
+
+                <div class="card-meta">
+                    SUB • DUB
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-  </div>
 
-  <div class="modal" id="chapterModal">
-    <div class="chapter-reader">
-      <button class="close-btn" onclick="closeChapter()">×</button>
-      <p class="eyebrow">re:think</p>
-      <h2 id="chapterTitle">Chapter 01</h2>
-      <div class="reader-text" id="readerText"></div>
-      <div class="reader-nav">
-        <button class="btn btn-outline" onclick="changeChapter(-1)">← Previous</button>
-        <button class="btn btn-red" onclick="changeChapter(1)">Next →</button>
-      </div>
+</section>
+
+
+<!-- NOVELS -->
+
+<section class="section" id="novels">
+
+    <div class="section-head">
+
+        <h2>
+            Novels
+        </h2>
+
+        <a href="#novels">
+            View All →
+        </a>
+
     </div>
-  </div>
 
-  <script src="app.js"></script>
+
+    <div class="novel-grid">
+
+
+        <div class="novel">
+
+            <small>
+                NOVEL 01
+            </small>
+
+            <h3>
+                Solo Leveling
+            </h3>
+
+            <p>
+                A hunter's journey from the weakest
+                to something far beyond imagination.
+            </p>
+
+        </div>
+
+
+        <div class="novel">
+
+            <small>
+                NOVEL 02
+            </small>
+
+            <h3>
+                Omniscient Reader
+            </h3>
+
+            <p>
+                A reader enters the world of the novel
+                he has followed for years.
+            </p>
+
+        </div>
+
+
+        <div class="novel">
+
+            <small>
+                NOVEL 03
+            </small>
+
+            <h3>
+                Beginning After The End
+            </h3>
+
+            <p>
+                A king receives a second life inside
+                a magical world.
+            </p>
+
+        </div>
+
+
+        <div class="novel">
+
+            <small>
+                NOVEL 04
+            </small>
+
+            <h3>
+                Lord of Mysteries
+            </h3>
+
+            <p>
+                Mystery, supernatural powers and
+                hidden secrets.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <strong>
+        ASTHR<span>o</span>
+    </strong>
+
+    <p>
+        Anime • Novels • More
+    </p>
+
+</footer>
+
+
+<script>
+
+let current = 0;
+
+const slides =
+    document.querySelectorAll(".slide");
+
+const dots =
+    document.querySelectorAll(".dot");
+
+
+function showSlide(index){
+
+    slides.forEach(
+        slide => slide.classList.remove("active")
+    );
+
+    dots.forEach(
+        dot => dot.classList.remove("active")
+    );
+
+    slides[index].classList.add("active");
+
+    dots[index].classList.add("active");
+
+    current = index;
+
+}
+
+
+function goSlide(index){
+
+    showSlide(index);
+
+}
+
+
+function nextSlide(){
+
+    current++;
+
+    if(current >= slides.length){
+        current = 0;
+    }
+
+    showSlide(current);
+
+}
+
+
+setInterval(
+    nextSlide,
+    5000
+);
+
+
+function chooseAnime(name){
+
+    alert(
+        "Selected: " +
+        name +
+        "\n\nASTHRo player coming soon."
+    );
+
+}
+
+
+function searchAnime(){
+
+    const name =
+        prompt("Search anime:");
+
+    if(name){
+
+        alert(
+            "Searching ASTHRo for: " +
+            name
+        );
+
+    }
+
+}
+
+
+function toggleMenu(){
+
+    alert(
+        "ASTHRo menu coming soon."
+    );
+
+}
+
+</script>
+
 </body>
 </html>
