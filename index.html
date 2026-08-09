@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07090d">
+<meta name="description" content="ASTHRo — Anime & Light Novels">
+<title>ASTHRo — Anime & Novels</title>
+
+<!-- Supabase browser client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#07090d;color:#fff;font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+button,input,select{font:inherit}
+button{cursor:pointer}
+img{max-width:100%}
+.hidden{display:none!important}
+
+/* NAVBAR */
+.navbar{height:68px;background:#0b1018;border-bottom:1px solid #1b2430;display:flex;align-items:center;padding:0 20px;position:sticky;top:0;z-index:1000}
+.menu-btn,.search-btn{width:42px;height:42px;border:0;background:transparent;color:#cbd3dc;display:flex;align-items:center;justify-content:center}
+.menu-btn{font-size:27px}.search-btn{font-size:25px}
+.menu-btn:hover,.search-btn:hover{color:#fff}
+.logo{margin-left:10px;color:#fff;text-decoration:none;font-size:26px;font-weight:800}.logo span,.side-menu-header span,.footer-logo span{color:#ed0715}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.sign-btn,.primary-btn{border:0;background:#ed0715;color:#fff;padding:10px 17px;border-radius:6px;font-size:13px;font-weight:700}
+.sign-btn:hover,.primary-btn:hover,.watch-btn:hover{background:#ff1826}
+.user-pill{color:#bfc8d2;font-size:12px;max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* SIDE MENU */
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1999;display:none}.menu-overlay.show{display:block}
+.side-menu{position:fixed;top:0;left:-290px;width:270px;height:100vh;background:#0b1018;border-right:1px solid #202a36;z-index:2000;padding:20px;transition:left .3s ease;overflow-y:auto}
+.side-menu.open{left:0}
+.side-menu-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:25px}.side-menu-header strong{font-size:22px}
+.close-menu{border:0;background:transparent;color:#aaa;font-size:28px}.close-menu:hover{color:#fff}
+.menu-link{display:block;width:100%;padding:13px 10px;margin-bottom:5px;color:#cbd3dc;text-decoration:none;border-radius:6px;font-size:14px}
+.menu-link:hover{background:#151d28;color:#fff}.menu-link.active{color:#ed0715}
+
+/* SEARCH */
+.search-box{display:none;padding:15px 20px;background:#0c121b;border-bottom:1px solid #1b2430;position:sticky;top:68px;z-index:900}
+.search-box.show{display:block}
+.search-input{width:100%;max-width:720px;background:#121a25;border:1px solid #273241;color:#fff;outline:none;border-radius:6px;padding:12px 14px}
+.search-input::placeholder{color:#697583}.search-input:focus{border-color:#ed0715}
+.search-results-label{margin-top:8px;color:#7e8996;font-size:11px}
+
+/* HERO */
+.hero{padding:25px 0 35px}
+.slider{position:relative;width:100%;height:500px;overflow:hidden;background:#0b1018}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;background-size:cover;background-position:center;background-repeat:no-repeat}
+.slide.active{opacity:1}
+.slide::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,8,13,.98) 0%,rgba(5,8,13,.82) 30%,rgba(5,8,13,.25) 75%,rgba(5,8,13,.55) 100%),linear-gradient(0deg,rgba(5,8,13,.7),transparent 45%)}
+.slide-content{position:absolute;z-index:2;left:7%;bottom:65px;width:55%}
+.rank{color:#ed0715;font-size:11px;font-weight:800;margin-bottom:9px}.slide-title{font-size:38px;line-height:1.08;margin-bottom:12px}
+.slide-text{max-width:560px;color:#c1c8d0;font-size:13px;line-height:1.6;margin-bottom:18px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.watch-btn{border:0;background:#ed0715;color:#fff;padding:11px 18px;border-radius:6px;font-size:13px;font-weight:700}
+.dots{position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:10;display:flex;flex-direction:column;gap:9px}
+.dot{width:9px;height:9px;border:0;border-radius:50%;background:#ddd;padding:0}.dot.active{background:#ed0715;transform:scale(1.25)}
+.hero-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#788391;z-index:5}
+
+/* SECTIONS */
+.section{padding:35px 20px}.section-head{display:flex;align-items:center;margin-bottom:18px}
+.section-head h2{font-size:22px}.view-all{margin-left:auto;color:#ed0715;text-decoration:none;font-size:12px}.view-all:hover{color:#ff1826}
+.loading,.empty{color:#788391;font-size:13px;padding:30px;text-align:center;width:100%}
+
+/* GRID */
+.anime-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.anime-card{background:#0f141b;border:1px solid #202a35;border-radius:7px;overflow:hidden;cursor:pointer;transition:transform .25s ease,border-color .25s ease}
+.anime-card:hover{transform:translateY(-4px);border-color:#ed0715}
+.poster{height:285px;position:relative;overflow:hidden;background:#111821}
+.poster img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease}.anime-card:hover .poster img{transform:scale(1.04)}
+.badge{position:absolute;top:8px;left:8px;background:#ed0715;padding:4px 7px;border-radius:3px;font-size:9px;font-weight:800}
+.card-info{padding:10px}.card-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card-meta{margin-top:5px;color:#788391;font-size:10px}
+
+/* GENRES */
+.genre-grid{display:flex;flex-wrap:wrap;gap:8px}.genre{padding:8px 13px;background:#111821;border:1px solid #222d39;border-radius:5px;color:#aeb8c4;font-size:11px;transition:.2s}
+.genre:hover,.genre.active{color:#fff;border-color:#ed0715;background:#151a22}
+
+/* NOVELS */
+.novel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.novel-card{background:#0f141b;border:1px solid #202a35;border-radius:7px;padding:16px;min-height:145px}
+.novel-label{color:#ed0715;font-size:9px;font-weight:800}.novel-card h3{margin-top:18px;font-size:15px}.novel-card p{margin-top:7px;color:#818b97;font-size:11px;line-height:1.5}
+.upload-row{display:flex;justify-content:flex-end;margin-bottom:14px}.upload-btn{border:1px solid #303d4d;background:#101721;color:#fff;padding:9px 13px;border-radius:6px;font-size:11px}
+.upload-btn:hover{border-color:#ed0715}.upload-note{color:#707b87;font-size:10px;margin-top:8px}
+
+/* INFO */
+.info-box{margin:0 20px 25px;padding:15px;background:#0d1824;border:1px solid #26394b;border-radius:7px;color:#b9c5d1;font-size:12px;line-height:1.6}.info-box strong{color:#ed0715}
+
+/* MODALS */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:5000;display:none;align-items:center;justify-content:center;padding:18px}
+.modal.show{display:flex}
+.modal-panel{width:min(920px,100%);max-height:92vh;overflow:auto;background:#0b1018;border:1px solid #263241;border-radius:10px;box-shadow:0 20px 70px rgba(0,0,0,.6)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 17px;border-bottom:1px solid #202a35;position:sticky;top:0;background:#0b1018;z-index:2}
+.modal-head h3{font-size:16px}.modal-close{border:0;background:transparent;color:#aab4c0;font-size:25px}.modal-close:hover{color:#fff}
+.detail-wrap{display:grid;grid-template-columns:210px 1fr;gap:18px;padding:18px}.detail-poster{width:210px;height:305px;object-fit:cover;border-radius:7px;background:#111821}
+.detail-title{font-size:25px;margin-bottom:9px}.detail-meta{color:#8994a0;font-size:11px;margin-bottom:12px}.detail-desc{color:#bcc5cf;font-size:12px;line-height:1.7}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.tag{background:#151d28;border:1px solid #263241;padding:5px 8px;border-radius:4px;color:#aeb8c4;font-size:10px}
+.episode-area{padding:0 18px 18px}.episode-area h4{font-size:14px;margin-bottom:10px}
+.episode-list{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}.episode-btn{border:1px solid #293545;background:#111821;color:#c7d0da;padding:8px 5px;border-radius:5px;font-size:10px}.episode-btn:hover,.episode-btn.active{border-color:#ed0715;color:#fff;background:#171c24}
+.player-wrap{padding:0 18px 18px}.video-player{width:100%;background:#000;border-radius:7px;max-height:58vh}.player-actions{display:flex;gap:8px;margin-top:8px}.small-btn{border:1px solid #303d4d;background:#111821;color:#d3d9df;padding:8px 11px;border-radius:5px;font-size:10px}.small-btn:hover{border-color:#ed0715}
+.no-episodes{color:#7f8995;font-size:11px;padding:14px;background:#101721;border-radius:6px}
+
+/* AUTH */
+.auth-form{padding:20px}.auth-tabs{display:flex;gap:8px;margin-bottom:15px}.auth-tab{flex:1;border:1px solid #2b3745;background:#101721;color:#9ba6b1;padding:9px;border-radius:5px;font-size:11px}.auth-tab.active{border-color:#ed0715;color:#fff}
+.form-group{margin-bottom:11px}.form-group label{display:block;color:#aab5c0;font-size:10px;margin-bottom:5px}.form-group input{width:100%;background:#111821;border:1px solid #293545;color:#fff;padding:10px;border-radius:5px;outline:none}.form-group input:focus{border-color:#ed0715}.auth-message{font-size:10px;color:#87929e;margin-top:10px;line-height:1.5}
+
+/* NOVEL MODAL */
+.novel-upload{padding:20px}.file-input{width:100%;border:1px dashed #334152;background:#101721;color:#9ba6b1;padding:18px;border-radius:7px}.novel-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 20px 20px}.novel-item{background:#101721;border:1px solid #243140;border-radius:7px;padding:12px}.novel-item strong{font-size:12px}.novel-item small{display:block;color:#75808c;margin-top:5px}
+
+/* TOAST */
+.toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#111821;border:1px solid #2b3745;color:#e2e7ec;padding:10px 14px;border-radius:6px;font-size:11px;z-index:9000;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* FOOTER */
+footer{border-top:1px solid #18222d;padding:35px 20px;text-align:center;color:#65707d;font-size:11px}.footer-logo{color:#fff;font-size:20px;font-weight:800;margin-bottom:7px}
+
+/* RESPONSIVE */
+@media(max-width:1050px){.anime-grid{grid-template-columns:repeat(5,1fr)}.poster{height:260px}}
+@media(max-width:800px){.anime-grid{grid-template-columns:repeat(4,1fr)}.poster{height:245px}.novel-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+.navbar{height:62px;padding:0 12px}.search-box{top:62px}.logo{font-size:23px}.sign-btn{padding:9px 12px;font-size:11px}.user-pill{display:none}
+.hero{padding:15px 0 25px}.slider{height:455px}.slide-content{left:8%;bottom:52px;width:76%}.slide-title{font-size:28px}.slide-text{font-size:11px}
+.anime-grid{grid-template-columns:repeat(2,1fr);gap:10px}.poster{height:245px}.novel-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+.novel-card{min-height:135px;padding:13px}.novel-card h3{font-size:13px}.detail-wrap{grid-template-columns:120px 1fr;gap:12px}.detail-poster{width:120px;height:175px}.detail-title{font-size:18px}.episode-list{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:380px){.slide-title{font-size:25px}.section{padding-left:14px;padding-right:14px}.info-box{margin-left:14px;margin-right:14px}.detail-wrap{grid-template-columns:1fr}.detail-poster{width:150px;height:215px}.episode-list{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+
+<body>
+
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+<aside class="side-menu" id="sideMenu">
+  <div class="side-menu-header">
+    <strong>ASTHR<span>o</span></strong>
+    <button class="close-menu" onclick="closeMenu()" aria-label="Close menu">×</button>
+  </div>
+  <a class="menu-link active" href="#home" onclick="closeMenu()">🏠 Home</a>
+  <a class="menu-link" href="#trending" onclick="closeMenu()">🔥 Trending</a>
+  <a class="menu-link" href="#anime" onclick="closeMenu()">🎬 Anime</a>
+  <a class="menu-link" href="#genres" onclick="closeMenu()">🏷️ Genres</a>
+  <a class="menu-link" href="#novels" onclick="closeMenu()">📖 Light Novels</a>
+  <a class="menu-link" href="#about" onclick="closeMenu()">ℹ️ About</a>
+</aside>
+
+<header class="navbar">
+  <button class="menu-btn" onclick="openMenu()" aria-label="Open menu">☰</button>
+  <a href="#home" class="logo">ASTHR<span>o</span></a>
+  <div class="nav-right">
+    <span class="user-pill hidden" id="userPill"></span>
+    <button class="search-btn" onclick="toggleSearch()" aria-label="Search">⌕</button>
+    <button class="sign-btn" id="authButton" onclick="openAuth()">Sign in</button>
+  </div>
+</header>
+
+<div class="search-box" id="searchBox">
+  <input id="searchInput" class="search-input" type="search" placeholder="Search anime from AniList..." autocomplete="off">
+  <div class="search-results-label" id="searchLabel">Search real AniList titles.</div>
+</div>
+
+<section class="hero" id="home">
+  <div class="slider" id="slider">
+    <div class="hero-loading" id="heroLoading">Loading anime slides...</div>
+    <div class="dots" id="dots"></div>
+  </div>
+</section>
+
+<div class="info-box">
+  🔖 Bookmark <strong>ASTHRo</strong> to keep up with new anime, episodes, novels and releases.
+  Posters and hero images load automatically from AniList — no local image files needed.
+</div>
+
+<section class="section" id="trending">
+  <div class="section-head">
+    <h2>🔥 Trending Anime</h2>
+    <a class="view-all" href="#anime">View All →</a>
+  </div>
+  <div class="anime-grid" id="trendingGrid"><div class="loading">Loading anime...</div></div>
+</section>
+
+<section class="section" id="anime">
+  <div class="section-head">
+    <h2>Latest / Popular Anime</h2>
+    <a class="view-all" href="#anime" onclick="loadPopularAnimeToPage()">Refresh →</a>
+  </div>
+  <div class="anime-grid" id="animeGrid"><div class="loading">Loading anime...</div></div>
+</section>
+
+<section class="section" id="genres">
+  <div class="section-head"><h2>Genres</h2></div>
+  <div class="genre-grid" id="genreGrid"></div>
+</section>
+
+<section class="section" id="novels">
+  <div class="section-head">
+    <h2>📖 Light Novels</h2>
+    <a class="view-all" href="#novels" onclick="openNovelUpload()">Upload →</a>
+  </div>
+  <div class="upload-row"><button class="upload-btn" onclick="openNovelUpload()">＋ Upload PDF / EPUB</button></div>
+  <div class="novel-grid" id="novelGrid"></div>
+</section>
+
+<section class="section" id="about">
+  <div class="section-head"><h2>About ASTHRo</h2></div>
+  <div class="info-box" style="margin:0">
+    ASTHRo uses AniList for anime metadata and images. Supabase can provide authentication,
+    episode playback URLs and novel storage/database features. Add your Supabase project
+    settings in the configuration section inside this file.
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">ASTHR<span>o</span></div>
+  <p>Anime • Episodes • Light Novels • More</p>
+</footer>
+
+<!-- ANIME DETAILS MODAL -->
+<div class="modal" id="animeModal">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h3 id="modalAnimeHeader">Anime</h3>
+      <button class="modal-close" onclick="closeModal('animeModal')">×</button>
+    </div>
+    <div class="detail-wrap">
+      <img id="detailPoster" class="detail-poster" alt="">
+      <div>
+        <h2 id="detailTitle" class="detail-title"></h2>
+        <div id="detailMeta" class="detail-meta"></div>
+        <div id="detailDesc" class="detail-desc"></div>
+        <div id="detailTags" class="tag-row"></div>
+      </div>
+    </div>
+    <div class="episode-area">
+      <h4>Episodes</h4>
+      <div id="episodeList" class="episode-list"></div>
+    </div>
+    <div class="player-wrap">
+      <video id="videoPlayer" class="video-player" controls playsinline preload="metadata"></video>
+      <div class="player-actions">
+        <button class="small-btn" onclick="fullscreenPlayer()">⛶ Fullscreen</button>
+        <button class="small-btn" onclick="openCurrentVideo()">↗ Open video</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-panel" style="max-width:430px">
+    <div class="modal-head">
+      <h3>ASTHRo Account</h3>
+      <button class="modal-close" onclick="closeModal('authModal')">×</button>
+    </div>
+    <div class="auth-form">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="loginTab" onclick="switchAuthMode('login')">Sign in</button>
+        <button class="auth-tab" id="signupTab" onclick="switchAuthMode('signup')">Create account</button>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input id="authEmail" type="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input id="authPassword" type="password" placeholder="••••••••">
+      </div>
+      <button class="primary-btn" style="width:100%" id="authSubmit" onclick="submitAuth()">Sign in</button>
+      <div class="auth-message" id="authMessage"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NOVEL UPLOAD MODAL -->
+<div class="modal" id="novelModal">
+  <div class="modal-panel" style="max-width:620px">
+    <div class="modal-head">
+      <h3>📖 Upload Light Novel</h3>
+      <button class="modal-close" onclick="closeModal('novelModal')">×</button>
+    </div>
+    <div class="novel-upload">
+      <div class="form-group">
+        <label>Novel title</label>
+        <input id="novelTitleInput" type="text" placeholder="Novel title">
+      </div>
+      <div class="form-group">
+        <label>Description (optional)</label>
+        <input id="novelDescInput" type="text" placeholder="Short description">
+      </div>
+      <div class="form-group">
+        <label>PDF / EPUB file</label>
+        <input id="novelFileInput" class="file-input" type="file" accept=".pdf,.epub,application/pdf,application/epub+zip">
+      </div>
+      <button class="primary-btn" style="width:100%" onclick="uploadNovel()">Upload novel</button>
+      <div class="upload-note">Requires a signed-in Supabase user and a Storage bucket named <b>novels</b>.</div>
+      <div class="auth-message" id="novelMessage"></div>
+    </div>
+    <div class="novel-list" id="novelLibrary"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   ASTHRo CONFIG
+   ============================================================
+   1) Create a Supabase project.
+   2) Replace SUPABASE_URL and SUPABASE_ANON_KEY below.
+   3) In Supabase Storage create a PUBLIC bucket called "novels".
+   4) Create the tables described near the bottom of this file.
+   ============================================================ */
+
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+const supabaseReady =
+  SUPABASE_URL.startsWith("https://") &&
+  !SUPABASE_URL.includes("YOUR_SUPABASE") &&
+  SUPABASE_ANON_KEY &&
+  !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE");
+
+const sb = supabaseReady
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+const ANILIST_API = "https://graphql.anilist.co";
+
+let animeData = [];
+let heroData = [];
+let currentSlide = 0;
+let slideTimer = null;
+let searchTimer = null;
+let authMode = "login";
+let currentAnime = null;
+let currentVideoUrl = "";
+let currentGenre = "";
+let allPopularCache = [];
+
+const FALLBACK_IMAGE =
+  "https://placehold.co/600x900/111821/ffffff?text=ASTHRo";
+
+/* ---------------- API ---------------- */
+
+async function anilistRequest(query, variables = {}) {
+  const response = await fetch(ANILIST_API, {
+    method: "POST",
+    headers: {"Content-Type":"application/json","Accept":"application/json"},
+    body: JSON.stringify({query, variables})
+  });
+  if (!response.ok) throw new Error("AniList HTTP " + response.status);
+  const json = await response.json();
+  if (json.errors) throw new Error(json.errors.map(e => e.message).join(", "));
+  return json.data;
+}
+
+function cleanDescription(text) {
+  if (!text) return "";
+  return text.replace(/<[^>]*>/g,"").replace(/\s+/g," ").trim();
+}
+
+function safeImage(url) {
+  return url || FALLBACK_IMAGE;
+}
+
+function displayTitle(item) {
+  return item.title?.english || item.title?.romaji || item.title?.native || "Untitled Anime";
+}
+
+function normalizeAnime(item) {
+  return {
+    id:item.id,
+    title:displayTitle(item),
+    romaji:item.title?.romaji || "",
+    image:item.coverImage?.extraLarge || item.coverImage?.large || item.coverImage?.medium || "",
+    banner:item.bannerImage || item.coverImage?.extraLarge || "",
+    format:item.format || "TV",
+    episodes:item.episodes || null,
+    duration:item.duration || null,
+    status:item.status || "",
+    score:item.averageScore || null,
+    popularity:item.popularity || null,
+    description:cleanDescription(item.description),
+    genres:item.genres || [],
+    year:item.seasonYear || item.startDate?.year || null
+  };
+}
+
+/* ---------------- AniList queries ---------------- */
+
+const MEDIA_FIELDS = `
+  id
+  title { english romaji native }
+  coverImage { extraLarge large medium }
+  bannerImage
+  format
+  episodes
+  duration
+  status
+  averageScore
+  popularity
+  description
+  genres
+  seasonYear
+  startDate { year }
+`;
+
+async function fetchPopular(page=1, perPage=36) {
+  const query = `
+    query($page:Int,$perPage:Int){
+      Page(page:$page,perPage:$perPage){
+        media(type:ANIME,sort:POPULARITY_DESC,isAdult:false){
+          ${MEDIA_FIELDS}
+        }
+      }
+    }`;
+  const data = await anilistRequest(query,{page,perPage});
+  return data.Page.media.map(normalizeAnime);
+}
+
+async function fetchTrending(perPage=12) {
+  const query = `
+    query($perPage:Int){
+      Page(page:1,perPage:$perPage){
+        media(type:ANIME,sort:TRENDING_DESC,isAdult:false){
+          ${MEDIA_FIELDS}
+        }
+      }
+    }`;
+  const data = await anilistRequest(query,{perPage});
+  return data.Page.media.map(normalizeAnime);
+}
+
+async function fetchGenre(genre, perPage=36) {
+  const query = `
+    query($genre:String,$perPage:Int){
+      Page(page:1,perPage:$perPage){
+        media(type:ANIME,genre:$genre,sort:POPULARITY_DESC,isAdult:false){
+          ${MEDIA_FIELDS}
+        }
+      }
+    }`;
+  const data = await anilistRequest(query,{genre,perPage});
+  return data.Page.media.map(normalizeAnime);
+}
+
+async function searchAniList(search) {
+  const query = `
+    query($search:String){
+      Page(page:1,perPage:36){
+        media(type:ANIME,search:$search,sort:POPULARITY_DESC,isAdult:false){
+          ${MEDIA_FIELDS}
+        }
+      }
+    }`;
+  const data = await anilistRequest(query,{search});
+  return data.Page.media.map(normalizeAnime);
+}
+
+async function fetchAnimeById(id) {
+  const query = `
+    query($id:Int){
+      Media(id:$id,type:ANIME){
+        ${MEDIA_FIELDS}
+      }
+    }`;
+  const data = await anilistRequest(query,{id});
+  return normalizeAnime(data.Media);
+}
+
+/* ---------------- Rendering ---------------- */
+
+function createAnimeCard(anime) {
+  const article = document.createElement("article");
+  article.className = "anime-card";
+  article.dataset.id = anime.id;
+  article.innerHTML = `
+    <div class="poster">
+      <img src="${safeImage(anime.image)}" alt="${escapeHtml(anime.title)}" loading="lazy"
+           onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
+      <span class="badge">${anime.status === "RELEASING" ? "AIRING" : (anime.format || "HD")}</span>
+    </div>
+    <div class="card-info">
+      <div class="card-title">${escapeHtml(anime.title)}</div>
+      <div class="card-meta">${escapeHtml(anime.format || "TV")} • ${anime.episodes || "?"} EPS${anime.score ? " • " + (anime.score/10).toFixed(1) : ""}</div>
+    </div>`;
+  article.addEventListener("click",()=>openAnime(anime.id));
+  return article;
+}
+
+function renderGrid(list, elementId) {
+  const grid = document.getElementById(elementId);
+  grid.innerHTML = "";
+  if (!list?.length) {
+    grid.innerHTML = `<div class="empty">No anime found.</div>`;
+    return;
+  }
+  list.forEach(a=>grid.appendChild(createAnimeCard(a)));
+}
+
+function renderAnime(list) {
+  animeData = list || [];
+  renderGrid(animeData,"animeGrid");
+  renderGrid(animeData.slice(0,12),"trendingGrid");
+}
+
+function renderGenreButtons() {
+  const genres = [
+    "Action","Adventure","Comedy","Drama","Ecchi","Fantasy","Horror",
+    "Mahou Shoujo","Mecha","Music","Mystery","Psychological","Romance",
+    "Sci-Fi","Slice of Life","Sports","Supernatural","Thriller","Isekai"
+  ];
+  const grid = document.getElementById("genreGrid");
+  grid.innerHTML = "";
+  genres.forEach(g=>{
+    const b = document.createElement("button");
+    b.className = "genre" + (currentGenre===g ? " active" : "");
+    b.textContent = g;
+    b.onclick = ()=>selectGenre(g);
+    grid.appendChild(b);
+  });
+}
+
+function renderHero(list) {
+  const slider = document.getElementById("slider");
+  const dots = document.getElementById("dots");
+  const loading = document.getElementById("heroLoading");
+  slider.querySelectorAll(".slide").forEach(s=>s.remove());
+  dots.innerHTML = "";
+  if (loading) loading.remove();
+  if (!list?.length) return;
+
+  list.forEach((anime,index)=>{
+    const slide=document.createElement("div");
+    slide.className="slide"+(index===0?" active":"");
+    const bg=safeImage(anime.banner || anime.image);
+    slide.style.backgroundImage=`url("${bg}")`;
+
+    const content=document.createElement("div");
+    content.className="slide-content";
+    content.innerHTML=`
+      <div class="rank">#${index+1} ${anime.status==="RELEASING"?"NOW AIRING":"TRENDING"}</div>
+      <h1 class="slide-title">${escapeHtml(anime.title.toUpperCase())}</h1>
+      <p class="slide-text">${escapeHtml(anime.description || "Discover this anime on ASTHRo.")}</p>
+      <button class="watch-btn">▶ WATCH NOW</button>`;
+    content.querySelector(".watch-btn").onclick=()=>openAnime(anime.id);
+    slide.appendChild(content);
+    slider.insertBefore(slide,dots);
+
+    const dot=document.createElement("button");
+    dot.className="dot"+(index===0?" active":"");
+    dot.onclick=()=>goSlide(index);
+    dots.appendChild(dot);
+  });
+
+  currentSlide=0;
+  startSlider();
+}
+
+function startSlider() {
+  if (slideTimer) clearInterval(slideTimer);
+  slideTimer=setInterval(nextSlide,5000);
+}
+function showSlide(index) {
+  const slides=document.querySelectorAll(".slide");
+  const dots=document.querySelectorAll(".dot");
+  if(!slides.length)return;
+  if(index>=slides.length)index=0;
+  if(index<0)index=slides.length-1;
+  slides.forEach(s=>s.classList.remove("active"));
+  dots.forEach(d=>d.classList.remove("active"));
+  slides[index].classList.add("active");
+  if(dots[index])dots[index].classList.add("active");
+  currentSlide=index;
+}
+function goSlide(index){showSlide(index);startSlider()}
+function nextSlide(){showSlide(currentSlide+1)}
+
+/* ---------------- Anime details + episodes ---------------- */
+
+async function openAnime(id) {
+  try {
+    let anime = animeData.find(a=>a.id===id) || heroData.find(a=>a.id===id) || allPopularCache.find(a=>a.id===id);
+    if (!anime) anime=await fetchAnimeById(id);
+    currentAnime=anime;
+
+    document.getElementById("modalAnimeHeader").textContent=anime.title;
+    document.getElementById("detailTitle").textContent=anime.title;
+    document.getElementById("detailPoster").src=safeImage(anime.image);
+    document.getElementById("detailPoster").alt=anime.title;
+    document.getElementById("detailMeta").textContent =
+      `${anime.format || "TV"} • ${anime.episodes || "?"} episodes • ${anime.status || "Unknown"}`
+      + (anime.score ? ` • Score ${(anime.score/10).toFixed(1)}` : "")
+      + (anime.year ? ` • ${anime.year}` : "");
+    document.getElementById("detailDesc").textContent=anime.description || "No description available.";
+    document.getElementById("detailTags").innerHTML=(anime.genres||[]).map(g=>`<span class="tag">${escapeHtml(g)}</span>`).join("");
+
+    document.getElementById("episodeList").innerHTML=`<div class="loading">Loading episodes...</div>`;
+    document.getElementById("videoPlayer").removeAttribute("src");
+    document.getElementById("videoPlayer").load();
+    currentVideoUrl="";
+
+    openModal("animeModal");
+    await loadEpisodes(anime.id);
+  } catch(err) {
+    console.error(err);
+    toast("Could not open anime details.");
+  }
+}
+
+async function loadEpisodes(anilistId) {
+  const list=document.getElementById("episodeList");
+  if(!sb) {
+    list.innerHTML=`<div class="no-episodes">Supabase is not configured yet. Add your Supabase URL/key to enable episode playback.</div>`;
+    return;
+  }
+
+  try {
+    const {data,error}=await sb.from("episodes")
+      .select("*")
+      .eq("anime_id",anilistId)
+      .order("episode_number",{ascending:true});
+    if(error)throw error;
+    if(!data?.length) {
+      list.innerHTML=`<div class="no-episodes">No playable episodes have been added for this anime yet.</div>`;
+      return;
+    }
+
+    list.innerHTML="";
+    data.forEach(ep=>{
+      const b=document.createElement("button");
+      b.className="episode-btn";
+      b.textContent=`EP ${ep.episode_number}`;
+      b.onclick=()=>playEpisode(ep,b);
+      list.appendChild(b);
+    });
+  } catch(err) {
+    console.error("Episode query:",err);
+    list.innerHTML=`<div class="no-episodes">Episode table is not available. Check your Supabase table and policies.</div>`;
+  }
+}
+
+function playEpisode(ep,button) {
+  const url=ep.video_url || ep.url || ep.video;
+  if(!url) {
+    toast("This episode has no video URL.");
+    return;
+  }
+  document.querySelectorAll(".episode-btn").forEach(b=>b.classList.remove("active"));
+  button.classList.add("active");
+  currentVideoUrl=url;
+  const player=document.getElementById("videoPlayer");
+  player.src=url;
+  player.load();
+  player.play().catch(()=>{});
+  document.querySelector(".player-wrap").scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+function fullscreenPlayer() {
+  const player=document.getElementById("videoPlayer");
+  if(player.requestFullscreen) player.requestFullscreen();
+  else if(player.webkitEnterFullscreen) player.webkitEnterFullscreen();
+}
+function openCurrentVideo() {
+  if(!currentVideoUrl){toast("Select an episode first.");return}
+  window.open(currentVideoUrl,"_blank","noopener");
+}
+
+/* ---------------- Search ---------------- */
+
+function toggleSearch() {
+  const box=document.getElementById("searchBox");
+  const input=document.getElementById("searchInput");
+  box.classList.toggle("show");
+  if(box.classList.contains("show")) input.focus();
+  else {input.value="";document.getElementById("searchLabel").textContent="Search real AniList titles.";renderAnime(allPopularCache);}
+}
+
+document.getElementById("searchInput").addEventListener("input",function(){
+  const value=this.value.trim();
+  clearTimeout(searchTimer);
+  if(!value) {
+    document.getElementById("searchLabel").textContent="Search real AniList titles.";
+    renderAnime(allPopularCache);
+    return;
+  }
+  searchTimer=setTimeout(async()=>{
+    document.getElementById("searchLabel").textContent="Searching AniList…";
+    try {
+      const results=await searchAniList(value);
+      renderGrid(results,"animeGrid");
+      document.getElementById("trendingGrid").innerHTML="";
+      document.getElementById("searchLabel").textContent=`${results.length} result(s) for "${value}"`;
+    } catch(err) {
+      console.error(err);
+      document.getElementById("searchLabel").textContent="Search failed. Please try again.";
+      document.getElementById("animeGrid").innerHTML=`<div class="empty">Search failed.</div>`;
+    }
+  },350);
+});
+
+async function selectGenre(genre) {
+  currentGenre=currentGenre===genre ? "" : genre;
+  renderGenreButtons();
+  if(!currentGenre) {renderAnime(allPopularCache);return}
+  document.getElementById("animeGrid").innerHTML=`<div class="loading">Loading ${genre} anime…</div>`;
+  try {
+    const results=await fetchGenre(genre);
+    renderGrid(results,"animeGrid");
+    document.getElementById("trendingGrid").innerHTML="";
+    document.getElementById("searchLabel").textContent=`Genre: ${genre}`;
+    document.getElementById("anime").scrollIntoView({behavior:"smooth"});
+  } catch(err) {
+    console.error(err);
+    document.getElementById("animeGrid").innerHTML=`<div class="empty">Genre could not be loaded.</div>`;
+  }
+}
+
+async function loadPopularAnimeToPage() {
+  try {
+    const list=await fetchPopular(1,36);
+    allPopularCache=list;
+    renderAnime(list);
+  } catch(e){toast("Could not refresh anime.");}
+}
+
+/* ---------------- Auth ---------------- */
+
+function openAuth() {
+  if(!sb){toast("Add Supabase URL and anon key in index.html first.");return}
+  const btn=document.getElementById("authButton");
+  if(btn.dataset.loggedIn==="true"){signOutUser();return}
+  document.getElementById("authMessage").textContent="";
+  openModal("authModal");
+}
+function switchAuthMode(mode) {
+  authMode=mode;
+  document.getElementById("loginTab").classList.toggle("active",mode==="login");
+  document.getElementById("signupTab").classList.toggle("active",mode==="signup");
+  document.getElementById("authSubmit").textContent=mode==="login"?"Sign in":"Create account";
+  document.getElementById("authMessage").textContent="";
+}
+async function submitAuth() {
+  if(!sb){return}
+  const email=document.getElementById("authEmail").value.trim();
+  const password=document.getElementById("authPassword").value;
+  const msg=document.getElementById("authMessage");
+  if(!email || password.length<6){msg.textContent="Enter a valid email and a password of at least 6 characters.";return}
+  msg.textContent="Please wait…";
+  try {
+    if(authMode==="signup") {
+      const {data,error}=await sb.auth.signUp({email,password});
+      if(error)throw error;
+      msg.textContent=data.session ? "Account created and signed in." : "Account created. Check your email if confirmation is enabled.";
+      if(data.session) closeModal("authModal");
+    } else {
+      const {error}=await sb.auth.signInWithPassword({email,password});
+      if(error)throw error;
+      closeModal("authModal");
+      toast("Signed in successfully.");
+    }
+    await refreshAuthUI();
+  } catch(err){msg.textContent=err.message || "Authentication failed."}
+}
+async function signOutUser() {
+  if(!sb)return;
+  const {error}=await sb.auth.signOut();
+  if(error){toast(error.message);return}
+  toast("Signed out.");
+  await refreshAuthUI();
+}
+async function refreshAuthUI() {
+  const btn=document.getElementById("authButton");
+  const pill=document.getElementById("userPill");
+  if(!sb) {
+    btn.textContent="Sign in";
+    btn.dataset.loggedIn="false";
+    pill.classList.add("hidden");
+    return;
+  }
+  const {data}=await sb.auth.getSession();
+  const user=data.session?.user;
+  if(user) {
+    btn.textContent="Sign out";
+    btn.dataset.loggedIn="true";
+    pill.textContent=user.email || "Signed in";
+    pill.classList.remove("hidden");
+  } else {
+    btn.textContent="Sign in";
+    btn.dataset.loggedIn="false";
+    pill.classList.add("hidden");
+  }
+}
+
+/* ---------------- Novels ---------------- */
+
+function openNovelUpload() {
+  if(!sb){toast("Add Supabase URL/key first.");return}
+  openModal("novelModal");
+  loadNovels();
+}
+
+async function uploadNovel() {
+  if(!sb){return}
+  const {data:sessionData}=await sb.auth.getSession();
+  if(!sessionData.session){toast("Sign in before uploading a novel.");return}
+  const file=document.getElementById("novelFileInput").files[0];
+  const title=document.getElementById("novelTitleInput").value.trim();
+  const desc=document.getElementById("novelDescInput").value.trim();
+  const msg=document.getElementById("novelMessage");
+  if(!file || !title){msg.textContent="Enter a title and choose a PDF/EPUB file.";return}
+  const ext=file.name.toLowerCase().endsWith(".epub")?"epub":"pdf";
+  const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const path=`${sessionData.session.user.id}/${Date.now()}_${safeName}`;
+  msg.textContent="Uploading…";
+  try {
+    const {error:uploadError}=await sb.storage.from("novels").upload(path,file,{upsert:false,contentType:file.type || (ext==="pdf"?"application/pdf":"application/epub+zip")});
+    if(uploadError)throw uploadError;
+    const {data:urlData}=sb.storage.from("novels").getPublicUrl(path);
+    const {error:dbError}=await sb.from("novels").insert({
+      title,
+      description:desc,
+      file_url:urlData.publicUrl,
+      file_path:path,
+      file_type:ext,
+      uploaded_by:sessionData.session.user.id
+    });
+    if(dbError)throw dbError;
+    msg.textContent="Novel uploaded successfully.";
+    document.getElementById("novelTitleInput").value="";
+    document.getElementById("novelDescInput").value="";
+    document.getElementById("novelFileInput").value="";
+    await loadNovels();
+    toast("Novel uploaded.");
+  } catch(err) {
+    console.error(err);
+    msg.textContent=err.message || "Upload failed. Check Storage/table policies.";
+  }
+}
+
+async function loadNovels() {
+  const grid=document.getElementById("novelGrid");
+  const library=document.getElementById("novelLibrary");
+  if(!sb) {
+    grid.innerHTML=`
+      <article class="novel-card"><div class="novel-label">NOVEL</div><h3>Supabase not configured</h3><p>Add your Supabase settings to enable the real novel library and uploads.</p></article>`;
+    return;
+  }
+  try {
+    const {data,error}=await sb.from("novels").select("*").order("created_at",{ascending:false}).limit(20);
+    if(error)throw error;
+    if(!data?.length) {
+      grid.innerHTML=`
+        <article class="novel-card"><div class="novel-label">LIBRARY</div><h3>No novels yet</h3><p>Use Upload to add your first PDF or EPUB.</p></article>`;
+      library.innerHTML="";
+      return;
+    }
+    grid.innerHTML="";
+    data.slice(0,8).forEach(n=>{
+      const a=document.createElement("article");
+      a.className="novel-card";
+      a.innerHTML=`<div class="novel-label">${escapeHtml((n.file_type||"NOVEL").toUpperCase())}</div><h3>${escapeHtml(n.title||"Untitled")}</h3><p>${escapeHtml(n.description||"Light novel")}</p>`;
+      a.onclick=()=>window.open(n.file_url,"_blank","noopener");
+      a.style.cursor="pointer";
+      grid.appendChild(a);
+    });
+    library.innerHTML=data.map(n=>`
+      <div class="novel-item">
+        <strong>${escapeHtml(n.title||"Untitled")}</strong>
+        <small>${escapeHtml((n.file_type||"file").toUpperCase())} • <a href="${escapeAttr(n.file_url)}" target="_blank" rel="noopener" style="color:#ed0715">Open</a></small>
+      </div>`).join("");
+  } catch(err) {
+    console.error("Novel query:",err);
+    grid.innerHTML=`<article class="novel-card"><div class="novel-label">SETUP</div><h3>Novel table not connected</h3><p>Create the novels table and Storage bucket, then refresh.</p></article>`;
+  }
+}
+
+/* ---------------- UI helpers ---------------- */
+
+function openModal(id){document.getElementById(id).classList.add("show")}
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal("animeModal");closeModal("authModal");closeModal("novelModal");closeMenu()}});
+
+function openMenu(){document.getElementById("sideMenu").classList.add("open");document.getElementById("menuOverlay").classList.add("show")}
+function closeMenu(){document.getElementById("sideMenu").classList.remove("open");document.getElementById("menuOverlay").classList.remove("show")}
+
+function toast(text) {
+  const el=document.getElementById("toast");
+  el.textContent=text;
+  el.classList.add("show");
+  clearTimeout(el._timer);
+  el._timer=setTimeout(()=>el.classList.remove("show"),2600);
+}
+function escapeHtml(value) {
+  return String(value??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+function escapeAttr(value){return escapeHtml(value).replace(/`/g,"&#096;")}
+
+/* ---------------- INIT ---------------- */
+
+async function init() {
+  renderGenreButtons();
+  loadNovels();
+
+  try {
+    const [popular,trending] = await Promise.all([
+      fetchPopular(1,36),
+      fetchTrending(12)
+    ]);
+    allPopularCache=popular;
+    animeData=popular;
+    heroData=trending;
+    renderGrid(popular,"animeGrid");
+    renderGrid(trending,"trendingGrid");
+    renderHero(trending);
+  } catch(err) {
+    console.error("AniList initialization:",err);
+    document.getElementById("animeGrid").innerHTML=`<div class="empty">AniList could not be reached. Check your internet connection and refresh.</div>`;
+    document.getElementById("trendingGrid").innerHTML=`<div class="empty">Trending anime could not be loaded.</div>`;
+    const loading=document.getElementById("heroLoading");
+    if(loading)loading.textContent="Anime slides could not be loaded.";
+  }
+
+  if(sb) {
+    await refreshAuthUI();
+    sb.auth.onAuthStateChange(()=>refreshAuthUI());
+  } else {
+    refreshAuthUI();
+  }
+}
+
+init();
+
+/* ============================================================
+   SUPABASE DATABASE / STORAGE SETUP
+   ============================================================
+   Run these in Supabase SQL Editor after replacing nothing
+   except if your project already has conflicting table names.
+
+   EPISODES:
+   create table if not exists public.episodes (
+     id bigint generated by default as identity primary key,
+     anime_id integer not null,
+     episode_number integer not null,
+     title text,
+     video_url text not null,
+     created_at timestamptz default now()
+   );
+
+   NOVELS:
+   create table if not exists public.novels (
+     id bigint generated by default as identity primary key,
+     title text not null,
+     description text,
+     file_url text not null,
+     file_path text,
+     file_type text,
+     uploaded_by uuid references auth.users(id),
+     created_at timestamptz default now()
+   );
+
+   IMPORTANT:
+   Add suitable RLS policies for your own project.
+   Create a PUBLIC Storage bucket named "novels" for getPublicUrl()
+   or change uploadNovel() to create signed URLs if you want private files.
+
+   Example episode:
+   insert into public.episodes (anime_id, episode_number, title, video_url)
+   values (16498, 1, 'Episode 1', 'https://YOUR-PLAYABLE-VIDEO-URL');
+
+   The anime_id is the AniList ID, so no local poster/image file is needed.
+   ============================================================ */
+</script>
+</body>
+</html>
