@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ASTHRo</title>
+<title>ASTHRo — Anime & Novels</title>
 
 <style>
 *{
@@ -18,43 +18,57 @@ html{
 }
 
 body{
-    background:#080b10;
+    background:#07090d;
     color:#fff;
     font-family:Arial,Helvetica,sans-serif;
     overflow-x:hidden;
 }
 
-/* NAVBAR */
+button,
+input{
+    font:inherit;
+}
+
+/* =========================
+   NAVBAR
+========================= */
 
 .navbar{
     height:68px;
-    background:#0e1826;
+    background:#0b1018;
+    border-bottom:1px solid #1b2430;
     display:flex;
     align-items:center;
     padding:0 20px;
     position:sticky;
     top:0;
     z-index:1000;
-    border-bottom:1px solid #182536;
 }
 
-.menu{
+.menu-btn,
+.search-btn{
     width:42px;
     height:42px;
     border:0;
     background:transparent;
-    color:#ddd;
-    font-size:28px;
+    color:#cbd3dc;
     cursor:pointer;
 }
 
-.logo{
-    margin-left:12px;
-    color:white;
-    text-decoration:none;
+.menu-btn{
     font-size:27px;
+}
+
+.search-btn{
+    font-size:24px;
+}
+
+.logo{
+    margin-left:10px;
+    color:#fff;
+    text-decoration:none;
+    font-size:26px;
     font-weight:800;
-    letter-spacing:-1px;
 }
 
 .logo span{
@@ -65,42 +79,139 @@ body{
     margin-left:auto;
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:10px;
 }
 
-.search{
-    width:42px;
-    height:42px;
+.sign-btn{
+    border:0;
+    background:#ed0715;
+    color:#fff;
+    padding:10px 17px;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:700;
+}
+
+/* =========================
+   SIDE MENU
+========================= */
+
+.menu-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    z-index:1999;
+    display:none;
+}
+
+.menu-overlay.show{
+    display:block;
+}
+
+.side-menu{
+    position:fixed;
+    top:0;
+    left:-290px;
+    width:270px;
+    height:100vh;
+    background:#0b1018;
+    border-right:1px solid #202a36;
+    z-index:2000;
+    padding:20px;
+    transition:.3s ease;
+}
+
+.side-menu.open{
+    left:0;
+}
+
+.side-menu-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:25px;
+}
+
+.side-menu-header strong{
+    font-size:22px;
+}
+
+.side-menu-header span{
+    color:#ed0715;
+}
+
+.close-menu{
     border:0;
     background:transparent;
-    color:#b9c4d2;
+    color:#aaa;
     font-size:25px;
     cursor:pointer;
 }
 
-.sign{
-    background:#ed0715;
-    border:0;
-    color:#fff;
-    padding:11px 18px;
+.menu-link{
+    display:block;
+    width:100%;
+    padding:13px 10px;
+    margin-bottom:5px;
+    color:#cbd3dc;
+    text-decoration:none;
     border-radius:5px;
     font-size:14px;
-    cursor:pointer;
 }
 
-/* HERO */
+.menu-link:hover{
+    background:#151d28;
+    color:#fff;
+}
+
+.menu-link.active{
+    color:#ed0715;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box{
+    display:none;
+    padding:15px 20px;
+    background:#0c121b;
+    border-bottom:1px solid #1b2430;
+}
+
+.search-box.show{
+    display:block;
+}
+
+.search-input{
+    width:100%;
+    max-width:600px;
+    background:#121a25;
+    border:1px solid #273241;
+    color:#fff;
+    outline:none;
+    border-radius:6px;
+    padding:12px 14px;
+}
+
+.search-input:focus{
+    border-color:#ed0715;
+}
+
+/* =========================
+   HERO
+========================= */
 
 .hero{
-    padding:78px 0 35px;
-    background:#080b10;
+    padding:25px 0 35px;
 }
 
 .slider{
     position:relative;
-    height:490px;
     width:100%;
+    height:500px;
     overflow:hidden;
-    border-radius:22px;
 }
 
 .slide{
@@ -116,62 +227,61 @@ body{
     opacity:1;
 }
 
-.slide:after{
+.slide::after{
     content:"";
     position:absolute;
     inset:0;
     background:
         linear-gradient(
             90deg,
-            rgba(7,12,20,.98) 0%,
-            rgba(7,12,20,.82) 30%,
-            rgba(7,12,20,.25) 75%,
-            rgba(7,12,20,.4) 100%
+            rgba(5,8,13,.98) 0%,
+            rgba(5,8,13,.82) 30%,
+            rgba(5,8,13,.25) 75%,
+            rgba(5,8,13,.45) 100%
         );
 }
 
 .slide-content{
     position:absolute;
     z-index:2;
-    left:8%;
+    left:7%;
     bottom:65px;
-    width:58%;
+    width:55%;
 }
 
 .rank{
     color:#ed0715;
     font-size:11px;
-    font-weight:700;
+    font-weight:800;
     margin-bottom:9px;
 }
 
 .slide-title{
-    font-size:34px;
+    font-size:38px;
     line-height:1.08;
-    font-weight:800;
     margin-bottom:12px;
 }
 
 .slide-text{
-    color:#c4cbd4;
-    font-size:14px;
+    max-width:520px;
+    color:#c1c8d0;
+    font-size:13px;
     line-height:1.6;
-    max-width:540px;
     margin-bottom:18px;
 }
 
-.play{
-    background:#ed0715;
+.watch-btn{
     border:0;
+    background:#ed0715;
     color:#fff;
     padding:11px 18px;
     border-radius:5px;
+    cursor:pointer;
     font-size:13px;
     font-weight:700;
-    cursor:pointer;
 }
 
-.play:hover{
+.watch-btn:hover{
     background:#ff1826;
 }
 
@@ -180,20 +290,19 @@ body{
     right:20px;
     top:50%;
     transform:translateY(-50%);
-    z-index:5;
+    z-index:10;
     display:flex;
     flex-direction:column;
-    gap:10px;
+    gap:9px;
 }
 
 .dot{
-    width:10px;
-    height:10px;
+    width:9px;
+    height:9px;
+    border:0;
     border-radius:50%;
     background:#ddd;
-    border:0;
     cursor:pointer;
-    opacity:.9;
 }
 
 .dot.active{
@@ -201,31 +310,34 @@ body{
     transform:scale(1.25);
 }
 
-/* GENERAL SECTION */
+/* =========================
+   SECTIONS
+========================= */
 
 .section{
-    padding:38px 20px;
+    padding:35px 20px;
 }
 
 .section-head{
     display:flex;
     align-items:center;
-    margin-bottom:20px;
+    margin-bottom:18px;
 }
 
 .section-head h2{
-    font-size:24px;
-    font-weight:700;
+    font-size:22px;
 }
 
-.section-head a{
+.view-all{
     margin-left:auto;
     color:#ed0715;
-    font-size:13px;
     text-decoration:none;
+    font-size:12px;
 }
 
-/* ANIME CARDS */
+/* =========================
+   ANIME GRID
+========================= */
 
 .anime-grid{
     display:grid;
@@ -233,23 +345,23 @@ body{
     gap:14px;
 }
 
-.card{
-    background:#101419;
+.anime-card{
+    background:#0f141b;
+    border:1px solid #202a35;
     border-radius:7px;
     overflow:hidden;
-    border:1px solid #202932;
     cursor:pointer;
     transition:.25s;
 }
 
-.card:hover{
+.anime-card:hover{
     transform:translateY(-4px);
     border-color:#ed0715;
 }
 
 .poster{
+    height:270px;
     position:relative;
-    height:260px;
     overflow:hidden;
 }
 
@@ -262,10 +374,9 @@ body{
 
 .badge{
     position:absolute;
-    left:8px;
     top:8px;
+    left:8px;
     background:#ed0715;
-    color:#fff;
     padding:4px 7px;
     border-radius:3px;
     font-size:9px;
@@ -290,7 +401,28 @@ body{
     font-size:10px;
 }
 
-/* NOVELS */
+/* =========================
+   GENRES
+========================= */
+
+.genre-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.genre{
+    padding:8px 13px;
+    background:#111821;
+    border:1px solid #222d39;
+    border-radius:5px;
+    color:#aeb8c4;
+    font-size:11px;
+}
+
+/* =========================
+   NOVELS
+========================= */
 
 .novel-grid{
     display:grid;
@@ -298,165 +430,123 @@ body{
     gap:14px;
 }
 
-.novel{
-    background:#101419;
-    border:1px solid #202932;
+.novel-card{
+    background:#0f141b;
+    border:1px solid #202a35;
     border-radius:7px;
-    padding:17px;
-    min-height:155px;
-    cursor:pointer;
-    transition:.25s;
+    padding:16px;
+    min-height:145px;
 }
 
-.novel:hover{
-    border-color:#ed0715;
-    transform:translateY(-3px);
-}
-
-.novel small{
+.novel-label{
     color:#ed0715;
     font-size:9px;
-    font-weight:700;
+    font-weight:800;
 }
 
-.novel h3{
-    margin-top:22px;
-    font-size:16px;
+.novel-card h3{
+    margin-top:18px;
+    font-size:15px;
 }
 
-.novel p{
+.novel-card p{
     margin-top:7px;
-    color:#858e99;
+    color:#818b97;
     font-size:11px;
     line-height:1.5;
 }
 
-/* NOTICE */
+/* =========================
+   INFO
+========================= */
 
-.notice{
-    margin:0 20px 20px;
-    background:#0e1d2b;
-    border:1px solid #174b6d;
+.info-box{
+    margin:0 20px 25px;
+    padding:15px;
+    background:#0d1824;
+    border:1px solid #26394b;
     border-radius:7px;
-    padding:13px 15px;
-    color:#c6d1dc;
+    color:#b9c5d1;
     font-size:12px;
-    line-height:1.5;
+    line-height:1.6;
 }
 
-.notice span{
+.info-box strong{
     color:#ed0715;
-    font-weight:700;
 }
 
-/* FOOTER */
+/* =========================
+   FOOTER
+========================= */
 
 footer{
-    margin-top:20px;
+    border-top:1px solid #18222d;
     padding:35px 20px;
     text-align:center;
-    color:#66717d;
+    color:#65707d;
     font-size:11px;
-    border-top:1px solid #18212b;
 }
 
-footer strong{
+.footer-logo{
     color:#fff;
     font-size:20px;
+    font-weight:800;
+    margin-bottom:7px;
 }
 
-footer strong span{
+.footer-logo span{
     color:#ed0715;
 }
 
-/* MOBILE */
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:700px){
 
     .navbar{
-        height:64px;
-        padding:0 14px;
+        height:62px;
+        padding:0 12px;
     }
 
     .logo{
-        font-size:24px;
+        font-size:23px;
     }
 
-    .sign{
-        padding:9px 13px;
-        font-size:12px;
+    .sign-btn{
+        padding:9px 12px;
+        font-size:11px;
     }
 
     .hero{
-        padding:55px 0 25px;
+        padding:15px 0 25px;
     }
 
     .slider{
-        height:470px;
-        border-radius:18px;
+        height:455px;
     }
 
     .slide-content{
-        left:9%;
-        bottom:55px;
-        width:78%;
+        left:8%;
+        bottom:52px;
+        width:76%;
     }
 
     .slide-title{
-        font-size:29px;
+        font-size:28px;
     }
 
     .slide-text{
-        font-size:12px;
-        line-height:1.55;
-    }
-
-    .rank{
-        font-size:10px;
-    }
-
-    .play{
-        font-size:12px;
-        padding:10px 15px;
-    }
-
-    .dots{
-        right:12px;
-        gap:9px;
-    }
-
-    .dot{
-        width:8px;
-        height:8px;
-    }
-
-    .section{
-        padding:30px 20px;
-    }
-
-    .section-head h2{
-        font-size:22px;
+        font-size:11px;
     }
 
     .anime-grid{
         grid-template-columns:repeat(2,1fr);
-        gap:11px;
+        gap:10px;
     }
 
     .poster{
-        height:245px;
-    }
-
-    .card-info{
-        padding:8px;
-    }
-
-    .card-title{
-        font-size:12px;
-    }
-
-    .card-meta{
-        font-size:9px;
+        height:240px;
     }
 
     .novel-grid{
@@ -464,29 +554,20 @@ footer strong span{
         gap:10px;
     }
 
-    .novel{
-        min-height:145px;
+    .novel-card{
+        min-height:135px;
         padding:13px;
     }
 
-    .novel h3{
-        margin-top:18px;
-        font-size:14px;
-    }
-
-    .novel p{
-        font-size:10px;
+    .novel-card h3{
+        font-size:13px;
     }
 }
 
 @media(max-width:380px){
 
     .slide-title{
-        font-size:26px;
-    }
-
-    .poster{
-        height:220px;
+        font-size:25px;
     }
 
     .section{
@@ -494,31 +575,78 @@ footer strong span{
         padding-right:14px;
     }
 
+    .info-box{
+        margin-left:14px;
+        margin-right:14px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+<!-- =========================
+     SIDE MENU
+========================= -->
+
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+<aside class="side-menu" id="sideMenu">
+
+    <div class="side-menu-header">
+        <strong>ASTHR<span>o</span></strong>
+
+        <button class="close-menu" onclick="closeMenu()">×</button>
+    </div>
+
+    <a class="menu-link active" href="#home" onclick="closeMenu()">
+        🏠 Home
+    </a>
+
+    <a class="menu-link" href="#anime" onclick="closeMenu()">
+        🎬 Anime
+    </a>
+
+    <a class="menu-link" href="#trending" onclick="closeMenu()">
+        🔥 Trending
+    </a>
+
+    <a class="menu-link" href="#genres" onclick="closeMenu()">
+        🏷️ Genres
+    </a>
+
+    <a class="menu-link" href="#novels" onclick="closeMenu()">
+        📖 Light Novels
+    </a>
+
+    <a class="menu-link" href="#about" onclick="closeMenu()">
+        ℹ️ About
+    </a>
+
+</aside>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
 
 <header class="navbar">
 
-    <button class="menu" onclick="toggleMenu()">
+    <button class="menu-btn" onclick="openMenu()">
         ☰
     </button>
 
-    <a class="logo" href="#home">
+    <a href="#home" class="logo">
         ASTHR<span>o</span>
     </a>
 
     <div class="nav-right">
 
-        <button class="search" onclick="searchAnime()">
+        <button class="search-btn" onclick="toggleSearch()">
             ⌕
         </button>
 
-        <button class="sign" onclick="alert('ASTHRo Sign in coming soon!')">
+        <button class="sign-btn" onclick="signIn()">
             Sign in
         </button>
 
@@ -527,24 +655,39 @@ footer strong span{
 </header>
 
 
-<!-- HERO -->
+<!-- =========================
+     SEARCH
+========================= -->
+
+<div class="search-box" id="searchBox">
+
+    <input
+        id="searchInput"
+        class="search-input"
+        type="search"
+        placeholder="Search anime..."
+        oninput="searchAnime(this.value)"
+    >
+
+</div>
+
+
+<!-- =========================
+     HERO
+========================= -->
 
 <section class="hero" id="home">
 
     <div class="slider">
 
-        <!-- 1 -->
-
         <div
             class="slide active"
-            style="background-image:url('attack-on-titan.jpeg')"
+            style="background-image:url('assets/covers/attack-on-titan.jpeg')"
         >
 
             <div class="slide-content">
 
-                <div class="rank">
-                    #1 TRENDING
-                </div>
+                <div class="rank">#1 TRENDING</div>
 
                 <h1 class="slide-title">
                     ATTACK ON TITAN
@@ -556,10 +699,10 @@ footer strong span{
                 </p>
 
                 <button
-                    class="play"
-                    onclick="chooseAnime('Attack on Titan')"
+                    class="watch-btn"
+                    onclick="openAnime('Attack on Titan')"
                 >
-                    ▶ CHOOSE
+                    ▶ WATCH NOW
                 </button>
 
             </div>
@@ -567,18 +710,14 @@ footer strong span{
         </div>
 
 
-        <!-- 2 -->
-
         <div
             class="slide"
-            style="background-image:url('bleach.jpeg')"
+            style="background-image:url('assets/covers/bleach.jpeg')"
         >
 
             <div class="slide-content">
 
-                <div class="rank">
-                    #2 TRENDING
-                </div>
+                <div class="rank">#2 TRENDING</div>
 
                 <h1 class="slide-title">
                     BLEACH
@@ -590,10 +729,10 @@ footer strong span{
                 </p>
 
                 <button
-                    class="play"
-                    onclick="chooseAnime('Bleach')"
+                    class="watch-btn"
+                    onclick="openAnime('Bleach')"
                 >
-                    ▶ CHOOSE
+                    ▶ WATCH NOW
                 </button>
 
             </div>
@@ -601,33 +740,29 @@ footer strong span{
         </div>
 
 
-        <!-- 3 -->
-
         <div
             class="slide"
-            style="background-image:url('eminence-in-shadow.jpeg')"
+            style="background-image:url('assets/covers/eminence-in-shadow.jpeg')"
         >
 
             <div class="slide-content">
 
-                <div class="rank">
-                    #3 TRENDING
-                </div>
+                <div class="rank">#3 TRENDING</div>
 
                 <h1 class="slide-title">
                     THE EMINENCE IN SHADOW
                 </h1>
 
                 <p class="slide-text">
-                    A mysterious world of shadows, secret
-                    organizations and overwhelming power.
+                    A mysterious world of shadows,
+                    secret organizations and overwhelming power.
                 </p>
 
                 <button
-                    class="play"
-                    onclick="chooseAnime('The Eminence in Shadow')"
+                    class="watch-btn"
+                    onclick="openAnime('The Eminence in Shadow')"
                 >
-                    ▶ CHOOSE
+                    ▶ WATCH NOW
                 </button>
 
             </div>
@@ -635,18 +770,14 @@ footer strong span{
         </div>
 
 
-        <!-- 4 -->
-
         <div
             class="slide"
-            style="background-image:url('mushoku-tensei.jpeg')"
+            style="background-image:url('assets/covers/mushoku-tensei.jpeg')"
         >
 
             <div class="slide-content">
 
-                <div class="rank">
-                    #4 TRENDING
-                </div>
+                <div class="rank">#4 TRENDING</div>
 
                 <h1 class="slide-title">
                     MUSHOKU TENSEI
@@ -658,10 +789,10 @@ footer strong span{
                 </p>
 
                 <button
-                    class="play"
-                    onclick="chooseAnime('Mushoku Tensei')"
+                    class="watch-btn"
+                    onclick="openAnime('Mushoku Tensei')"
                 >
-                    ▶ CHOOSE
+                    ▶ WATCH NOW
                 </button>
 
             </div>
@@ -669,18 +800,14 @@ footer strong span{
         </div>
 
 
-        <!-- 5 -->
-
         <div
             class="slide"
-            style="background-image:url('chainsaw-man-reze-arc.jpeg')"
+            style="background-image:url('assets/covers/chainsaw-man-reze-arc.jpeg')"
         >
 
             <div class="slide-content">
 
-                <div class="rank">
-                    #5 TRENDING
-                </div>
+                <div class="rank">#5 TRENDING</div>
 
                 <h1 class="slide-title">
                     CHAINSAW MAN
@@ -692,10 +819,10 @@ footer strong span{
                 </p>
 
                 <button
-                    class="play"
-                    onclick="chooseAnime('Chainsaw Man')"
+                    class="watch-btn"
+                    onclick="openAnime('Chainsaw Man')"
                 >
-                    ▶ CHOOSE
+                    ▶ WATCH NOW
                 </button>
 
             </div>
@@ -703,34 +830,13 @@ footer strong span{
         </div>
 
 
-        <!-- DOTS -->
-
         <div class="dots">
 
-            <button
-                class="dot active"
-                onclick="goSlide(0)"
-            ></button>
-
-            <button
-                class="dot"
-                onclick="goSlide(1)"
-            ></button>
-
-            <button
-                class="dot"
-                onclick="goSlide(2)"
-            ></button>
-
-            <button
-                class="dot"
-                onclick="goSlide(3)"
-            ></button>
-
-            <button
-                class="dot"
-                onclick="goSlide(4)"
-            ></button>
+            <button class="dot active" onclick="goSlide(0)"></button>
+            <button class="dot" onclick="goSlide(1)"></button>
+            <button class="dot" onclick="goSlide(2)"></button>
+            <button class="dot" onclick="goSlide(3)"></button>
+            <button class="dot" onclick="goSlide(4)"></button>
 
         </div>
 
@@ -739,312 +845,210 @@ footer strong span{
 </section>
 
 
-<!-- NOTICE -->
+<!-- =========================
+     NOTICE
+========================= -->
 
-<div class="notice">
+<div class="info-box">
 
-    🔖 Bookmark <span>ASTHRo</span>
-    to stay updated about new anime,
+    🔖 Bookmark <strong>ASTHRo</strong>
+    to keep up with new anime, episodes,
     novels and releases.
 
 </div>
 
 
-<!-- ANIME -->
+<!-- =========================
+     TRENDING
+========================= -->
 
-<section class="section" id="anime">
+<section class="section" id="trending">
 
     <div class="section-head">
 
-        <h2>
-            Latest Anime
-        </h2>
+        <h2>🔥 Trending Anime</h2>
 
-        <a href="#anime">
+        <a class="view-all" href="#anime">
             View All →
         </a>
 
     </div>
 
+    <div class="anime-grid" id="trendingGrid"></div>
 
-    <div class="anime-grid">
-
-
-        <div
-            class="card"
-            onclick="chooseAnime('Attack on Titan')"
-        >
-
-            <div class="poster">
-
-                <img
-                    src="attack-on-titan.jpeg"
-                    alt="Attack on Titan"
-                >
-
-                <span class="badge">
-                    HD
-                </span>
-
-            </div>
-
-            <div class="card-info">
-
-                <div class="card-title">
-                    Attack on Titan
-                </div>
-
-                <div class="card-meta">
-                    SUB • DUB
-                </div>
-
-            </div>
-
-        </div>
+</section>
 
 
-        <div
-            class="card"
-            onclick="chooseAnime('Bleach')"
-        >
+<!-- =========================
+     LATEST ANIME
+========================= -->
 
-            <div class="poster">
+<section class="section" id="anime">
 
-                <img
-                    src="bleach.jpeg"
-                    alt="Bleach"
-                >
+    <div class="section-head">
 
-                <span class="badge">
-                    HD
-                </span>
+        <h2>Latest Anime</h2>
 
-            </div>
+        <a class="view-all" href="#anime">
+            View All →
+        </a>
 
-            <div class="card-info">
+    </div>
 
-                <div class="card-title">
-                    Bleach
-                </div>
+    <div class="anime-grid" id="animeGrid"></div>
 
-                <div class="card-meta">
-                    SUB • DUB
-                </div>
-
-            </div>
-
-        </div>
+</section>
 
 
-        <div
-            class="card"
-            onclick="chooseAnime('The Eminence in Shadow')"
-        >
+<!-- =========================
+     GENRES
+========================= -->
 
-            <div class="poster">
+<section class="section" id="genres">
 
-                <img
-                    src="eminence-in-shadow.jpeg"
-                    alt="Eminence in Shadow"
-                >
+    <div class="section-head">
 
-                <span class="badge">
-                    HD
-                </span>
+        <h2>Genres</h2>
 
-            </div>
+    </div>
 
-            <div class="card-info">
+    <div class="genre-grid">
 
-                <div class="card-title">
-                    The Eminence in Shadow
-                </div>
-
-                <div class="card-meta">
-                    SUB • DUB
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div
-            class="card"
-            onclick="chooseAnime('Mushoku Tensei')"
-        >
-
-            <div class="poster">
-
-                <img
-                    src="mushoku-tensei.jpeg"
-                    alt="Mushoku Tensei"
-                >
-
-                <span class="badge">
-                    HD
-                </span>
-
-            </div>
-
-            <div class="card-info">
-
-                <div class="card-title">
-                    Mushoku Tensei
-                </div>
-
-                <div class="card-meta">
-                    SUB • DUB
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div
-            class="card"
-            onclick="chooseAnime('Chainsaw Man')"
-        >
-
-            <div class="poster">
-
-                <img
-                    src="chainsaw-man-reze-arc.jpeg"
-                    alt="Chainsaw Man"
-                >
-
-                <span class="badge">
-                    HD
-                </span>
-
-            </div>
-
-            <div class="card-info">
-
-                <div class="card-title">
-                    Chainsaw Man
-                </div>
-
-                <div class="card-meta">
-                    SUB • DUB
-                </div>
-
-            </div>
-
-        </div>
+        <div class="genre">Action</div>
+        <div class="genre">Adventure</div>
+        <div class="genre">Comedy</div>
+        <div class="genre">Drama</div>
+        <div class="genre">Fantasy</div>
+        <div class="genre">Romance</div>
+        <div class="genre">Isekai</div>
+        <div class="genre">Supernatural</div>
+        <div class="genre">Mystery</div>
+        <div class="genre">Psychological</div>
 
     </div>
 
 </section>
 
 
-<!-- NOVELS -->
+<!-- =========================
+     NOVELS
+========================= -->
 
 <section class="section" id="novels">
 
     <div class="section-head">
 
-        <h2>
-            Novels
-        </h2>
+        <h2>📖 Light Novels</h2>
 
-        <a href="#novels">
+        <a class="view-all" href="#novels">
             View All →
         </a>
 
     </div>
 
-
     <div class="novel-grid">
 
+        <article class="novel-card">
 
-        <div class="novel">
+            <div class="novel-label">NOVEL</div>
 
-            <small>
-                NOVEL 01
-            </small>
-
-            <h3>
-                Solo Leveling
-            </h3>
+            <h3>Solo Leveling</h3>
 
             <p>
                 A hunter's journey from the weakest
                 to something far beyond imagination.
             </p>
 
-        </div>
+        </article>
 
 
-        <div class="novel">
+        <article class="novel-card">
 
-            <small>
-                NOVEL 02
-            </small>
+            <div class="novel-label">NOVEL</div>
 
-            <h3>
-                Omniscient Reader
-            </h3>
+            <h3>Omniscient Reader</h3>
 
             <p>
                 A reader enters the world of the novel
                 he has followed for years.
             </p>
 
-        </div>
+        </article>
 
 
-        <div class="novel">
+        <article class="novel-card">
 
-            <small>
-                NOVEL 03
-            </small>
+            <div class="novel-label">NOVEL</div>
 
-            <h3>
-                Beginning After The End
-            </h3>
+            <h3>Beginning After The End</h3>
 
             <p>
                 A king receives a second life inside
                 a magical world.
             </p>
 
-        </div>
+        </article>
 
 
-        <div class="novel">
+        <article class="novel-card">
 
-            <small>
-                NOVEL 04
-            </small>
+            <div class="novel-label">NOVEL</div>
 
-            <h3>
-                Lord of Mysteries
-            </h3>
+            <h3>Lord of Mysteries</h3>
 
             <p>
                 Mystery, supernatural powers and
                 hidden secrets.
             </p>
 
-        </div>
+        </article>
 
     </div>
 
 </section>
 
 
-<!-- FOOTER -->
+<!-- =========================
+     ABOUT
+========================= -->
+
+<section class="section" id="about">
+
+    <div class="section-head">
+
+        <h2>About ASTHRo</h2>
+
+    </div>
+
+    <div class="info-box" style="margin:0">
+
+        ASTHRo is being built as a complete anime and
+        light-novel platform.
+
+        <br><br>
+
+        Anime details, episodes, video player,
+        user accounts, watchlist, comments,
+        ratings and owner controls will be connected
+        in the next stages.
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer>
 
-    <strong>
+    <div class="footer-logo">
         ASTHR<span>o</span>
-    </strong>
+    </div>
 
     <p>
-        Anime • Novels • More
+        Anime • Episodes • Light Novels • More
     </p>
 
 </footer>
@@ -1052,7 +1056,203 @@ footer strong span{
 
 <script>
 
-let current = 0;
+/* =========================
+   ANIME DATA
+   Add future anime here
+========================= */
+
+const animeData = [
+
+    {
+        title:"Attack on Titan",
+        image:"assets/covers/attack-on-titan.jpeg",
+        meta:"SUB • DUB",
+        badge:"HD"
+    },
+
+    {
+        title:"Bleach",
+        image:"assets/covers/bleach.jpeg",
+        meta:"SUB • DUB",
+        badge:"HD"
+    },
+
+    {
+        title:"The Eminence in Shadow",
+        image:"assets/covers/eminence-in-shadow.jpeg",
+        meta:"SUB • DUB",
+        badge:"HD"
+    },
+
+    {
+        title:"Mushoku Tensei",
+        image:"assets/covers/mushoku-tensei.jpeg",
+        meta:"SUB • DUB",
+        badge:"HD"
+    },
+
+    {
+        title:"Chainsaw Man",
+        image:"assets/covers/chainsaw-man-reze-arc.jpeg",
+        meta:"SUB • DUB",
+        badge:"HD"
+    }
+
+];
+
+
+/* =========================
+   CREATE ANIME CARD
+========================= */
+
+function createAnimeCard(anime){
+
+    return `
+
+        <article
+            class="anime-card"
+            onclick="openAnime('${anime.title.replace(/'/g,"\\'")}')"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="${anime.image}"
+                    alt="${anime.title}"
+                    loading="lazy"
+                >
+
+                <span class="badge">
+                    ${anime.badge}
+                </span>
+
+            </div>
+
+            <div class="card-info">
+
+                <div class="card-title">
+                    ${anime.title}
+                </div>
+
+                <div class="card-meta">
+                    ${anime.meta}
+                </div>
+
+            </div>
+
+        </article>
+
+    `;
+}
+
+
+/* =========================
+   RENDER ANIME
+========================= */
+
+function renderAnime(list){
+
+    const animeGrid =
+        document.getElementById("animeGrid");
+
+    const trendingGrid =
+        document.getElementById("trendingGrid");
+
+    animeGrid.innerHTML =
+        list.map(createAnimeCard).join("");
+
+    trendingGrid.innerHTML =
+        list.slice(0,5)
+            .map(createAnimeCard)
+            .join("");
+}
+
+
+/* Initial render */
+
+renderAnime(animeData);
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function toggleSearch(){
+
+    const box =
+        document.getElementById("searchBox");
+
+    box.classList.toggle("show");
+
+    if(box.classList.contains("show")){
+
+        document
+            .getElementById("searchInput")
+            .focus();
+
+    }
+
+}
+
+
+function searchAnime(value){
+
+    const query =
+        value.trim().toLowerCase();
+
+    if(!query){
+
+        renderAnime(animeData);
+
+        return;
+    }
+
+    const results =
+        animeData.filter(anime =>
+            anime.title
+                .toLowerCase()
+                .includes(query)
+        );
+
+    renderAnime(results);
+}
+
+
+/* =========================
+   SIDE MENU
+========================= */
+
+function openMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList.add("open");
+
+    document
+        .getElementById("menuOverlay")
+        .classList.add("show");
+
+}
+
+
+function closeMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList.remove("open");
+
+    document
+        .getElementById("menuOverlay")
+        .classList.remove("show");
+
+}
+
+
+/* =========================
+   SLIDER
+========================= */
+
+let currentSlide = 0;
 
 const slides =
     document.querySelectorAll(".slide");
@@ -1063,20 +1263,19 @@ const dots =
 
 function showSlide(index){
 
-    slides.forEach(
-        slide => slide.classList.remove("active")
+    slides.forEach(slide =>
+        slide.classList.remove("active")
     );
 
-    dots.forEach(
-        dot => dot.classList.remove("active")
+    dots.forEach(dot =>
+        dot.classList.remove("active")
     );
 
     slides[index].classList.add("active");
 
     dots[index].classList.add("active");
 
-    current = index;
-
+    currentSlide = index;
 }
 
 
@@ -1089,55 +1288,39 @@ function goSlide(index){
 
 function nextSlide(){
 
-    current++;
+    currentSlide++;
 
-    if(current >= slides.length){
-        current = 0;
+    if(currentSlide >= slides.length){
+
+        currentSlide = 0;
+
     }
 
-    showSlide(current);
-
+    showSlide(currentSlide);
 }
 
 
-setInterval(
-    nextSlide,
-    5000
-);
+setInterval(nextSlide,5000);
 
 
-function chooseAnime(name){
+/* =========================
+   FUTURE ROUTES
+========================= */
+
+function openAnime(name){
 
     alert(
-        "Selected: " +
         name +
-        "\n\nASTHRo player coming soon."
+        "\n\nAnime details, episodes and video player will be connected next."
     );
 
 }
 
 
-function searchAnime(){
-
-    const name =
-        prompt("Search anime:");
-
-    if(name){
-
-        alert(
-            "Searching ASTHRo for: " +
-            name
-        );
-
-    }
-
-}
-
-
-function toggleMenu(){
+function signIn(){
 
     alert(
-        "ASTHRo menu coming soon."
+        "Sign in system will be connected in the next stage."
     );
 
 }
