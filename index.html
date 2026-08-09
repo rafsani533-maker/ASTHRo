@@ -1361,5 +1361,32 @@ async function loadAnime() {
 loadAnime();
 </script>
 
+    <script>
+async function loadAnime() {
+    try {
+        const response = await fetch(
+            `${window.SUPABASE_URL}/rest/v1/anime?select=*`,
+            {
+                headers: {
+                    "apikey": window.SUPABASE_PUBLISHABLE_KEY
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
+
+        const anime = await response.json();
+
+        console.log("Anime loaded from Supabase:", anime);
+
+    } catch (error) {
+        console.error("Supabase error:", error);
+    }
+}
+
+loadAnime();
+</script>
 </body>
 </html>
