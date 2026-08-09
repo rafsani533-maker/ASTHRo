@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ASTHRo Developer Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.admin-page{min-height:100vh;background:#f6efe8}.admin-wrap{width:min(1150px,92%);margin:auto;padding:40px 0}.admin-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.admin-title h1{font-family:"Playfair Display";font-size:42px}.owner-badge{background:#161a23;color:#fff;border:1px solid #d8a52b;padding:8px 12px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:1px}.admin-grid{display:grid;grid-template-columns:280px 1fr;gap:20px}.side,.panel{background:#fff;border:1px solid #eadfd4;border-radius:18px;padding:22px}.side button{width:100%;padding:13px;border:0;background:none;text-align:left;border-radius:10px;font-weight:800;margin:3px 0}.side button.active,.side button:hover{background:#fff0eb;color:#d51f37}.panel h2{font-family:"Playfair Display";font-size:32px}.panel p{color:#777;margin:7px 0 22px}.field{margin:13px 0}.field label{display:block;font-size:12px;font-weight:900;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #ddd0c6;border-radius:9px}.field textarea{min-height:100px}.upload-box{border:2px dashed #e2b4aa;border-radius:12px;padding:22px;text-align:center;background:#fffaf7}.upload-box input{margin-top:10px}.admin-table{width:100%;border-collapse:collapse;margin-top:20px}.admin-table th,.admin-table td{text-align:left;padding:11px;border-bottom:1px solid #eadfd4;font-size:13px}.notice{background:#fff4d8;border:1px solid #e6c96e;padding:14px;border-radius:10px;font-size:13px;margin:15px 0}.hidden{display:none!important}@media(max-width:800px){.admin-grid{grid-template-columns:1fr}.admin-top{align-items:flex-start;gap:15px}.admin-title h1{font-size:32px}}
+</style>
+</head>
+<body class="admin-page">
+<div class="top-strip"></div>
+<div class="admin-wrap">
+  <div class="admin-top">
+    <div class="admin-title"><p class="eyebrow">PRIVATE AREA</p><h1>ASTHRo Developer</h1></div>
+    <span class="owner-badge">FOUNDER & DEVELOPER</span>
+  </div>
+  <div class="notice">This V1 panel is a frontend prototype. Real secure Owner authentication and permanent cloud video/file storage must be connected before public deployment.</div>
+  <div class="admin-grid">
+    <aside class="side">
+      <button class="active" data-panel="animePanel">🎬 Anime & Episodes</button>
+      <button data-panel="novelPanel">📚 Novel Management</button>
+      <button data-panel="usersPanel">👥 Users</button>
+      <button data-panel="settingsPanel">⚙️ Site Settings</button>
+      <a class="btn btn-outline" href="index.html" style="width:100%;margin-top:12px">← Back to ASTHRo</a>
+    </aside>
+
+    <section class="panel" id="animePanel">
+      <p class="eyebrow">OWNER ONLY</p><h2>Add Anime / Episode</h2>
+      <p>Add metadata now; connect cloud storage later for permanent public video hosting.</p>
+      <div class="field"><label>Anime title</label><input id="animeTitle" placeholder="e.g. Attack on Titan"></div>
+      <div class="field"><label>Episode number</label><input id="episodeNumber" type="number" min="1" placeholder="1"></div>
+      <div class="field"><label>Episode title</label><input id="episodeTitle" placeholder="e.g. To You, in 2000 Years"></div>
+      <div class="upload-box"><b>Episode video file</b><br><small>Select a local video for preview</small><br><input id="videoFile" type="file" accept="video/*"></div>
+      <button class="btn btn-red" style="margin-top:18px" onclick="addEpisode()">Add Episode Metadata</button>
+      <table class="admin-table"><thead><tr><th>Anime</th><th>Episode</th><th>Title</th><th>Status</th></tr></thead><tbody id="episodeTable"></tbody></table>
+    </section>
+
+    <section class="panel hidden" id="novelPanel">
+      <p class="eyebrow">AUTHOR & OWNER</p><h2>Novel Management</h2><p>Authors will be able to create novels and upload chapters. Owner can moderate all content.</p>
+      <div class="field"><label>Novel title</label><input placeholder="re:think"></div>
+      <div class="field"><label>Chapter number</label><input type="number" placeholder="1"></div>
+      <div class="field"><label>Chapter text</label><textarea placeholder="Write chapter content..."></textarea></div>
+      <button class="btn btn-red" onclick="alert('Prototype saved locally only. Connect Firestore in backend phase.')">Save Chapter</button>
+    </section>
+
+    <section class="panel hidden" id="usersPanel">
+      <p class="eyebrow">ACCESS CONTROL</p><h2>User Roles</h2>
+      <p>Production version will use server-side role checks. Never rely on frontend-only admin flags.</p>
+      <table class="admin-table"><thead><tr><th>Role</th><th>Permissions</th></tr></thead>
+      <tbody><tr><td>OWNER</td><td>Anime, Episodes, Novels, Users, Moderation</td></tr><tr><td>AUTHOR</td><td>Own Novels + Chapters</td></tr><tr><td>READER</td><td>Watch, Read, Bookmark, Rate</td></tr></tbody></table>
+    </section>
+
+    <section class="panel hidden" id="settingsPanel">
+      <p class="eyebrow">BRANDING</p><h2>ASTHRo Settings</h2>
+      <p>Theme locked to the requested White + Red + Gold palette.</p>
+      <div class="field"><label>Site name</label><input value="ASTHRo"></div>
+      <div class="field"><label>Tagline</label><input value="Anime. Stories. Infinite worlds."></div>
+      <button class="btn btn-red" onclick="alert('Prototype settings are not connected to a database yet.')">Save Settings</button>
+    </section>
+  </div>
+</div>
+<script>
+const buttons=document.querySelectorAll(".side button");
+buttons.forEach(btn=>btn.addEventListener("click",()=>{
+  buttons.forEach(b=>b.classList.remove("active"));btn.classList.add("active");
+  document.querySelectorAll(".panel").forEach(p=>p.classList.add("hidden"));
+  document.getElementById(btn.dataset.panel).classList.remove("hidden");
+}));
+let episodes=JSON.parse(localStorage.getItem("asthroEpisodes")||"[]");
+function drawEpisodes(){
+  document.getElementById("episodeTable").innerHTML=episodes.map(e=>`<tr><td>${e.anime}</td><td>${e.ep}</td><td>${e.title}</td><td>${e.video?"Local preview selected":"Metadata only"}</td></tr>`).join("");
+}
+function addEpisode(){
+  const anime=document.getElementById("animeTitle").value.trim(),ep=document.getElementById("episodeNumber").value,title=document.getElementById("episodeTitle").value.trim(),file=document.getElementById("videoFile").files[0];
+  if(!anime||!ep||!title){alert("Please fill Anime title, Episode number and Episode title.");return}
+  episodes.push({anime,ep,title,video:!!file});
+  localStorage.setItem("asthroEpisodes",JSON.stringify(episodes));
+  drawEpisodes();
+  alert("Episode metadata added to this browser. For public persistence/video hosting, connect Firebase Storage + Firestore.");
+}
+drawEpisodes();
+</script>
+</body>
+</html>
