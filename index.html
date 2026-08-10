@@ -25,10 +25,18 @@
     /* =========================================
        ANILIST API
     ========================================= */
+const sb = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
 
     const ANILIST_API =
-        "https://graphql.anilist.co";
+     "https://graphql.anilist.co";
+    
+    console.log("Supabase Connected");
     </script>
+    
     
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -991,6 +999,10 @@ init();
 
    The anime_id is the AniList ID, so no local poster/image file is needed.
    ============================================================ */
+
+
+
+
 </script>
 </body>
 </html>
