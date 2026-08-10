@@ -332,8 +332,7 @@ footer{border-top:1px solid #18222d;padding:35px 20px;text-align:center;color:#6
    4) Create the tables described near the bottom of this file.
    ============================================================ */
 
-const SUPABASE_URL = "YOUR_SUPABASE_URL";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
 
 const supabaseReady =
   SUPABASE_URL.startsWith("https://") &&
@@ -345,7 +344,7 @@ const sb = supabaseReady
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null;
 
-const ANILIST_API = "https://graphql.anilist.co";
+
 
 let animeData = [];
 let heroData = [];
